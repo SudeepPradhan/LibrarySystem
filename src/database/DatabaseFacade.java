@@ -4,26 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 import models.base.Author;
 import models.business.LibraryMember;
-import models.business.Publication;
 import models.business.User;
+
+import businessmodels.Product;
 
 public class DatabaseFacade implements DataManager {
 
     private List<User> users;
-    private List<Publication> publications;
     private List<LibraryMember> libraryMembers;
     private List<Author> authors;
+    
+    private List<Product> products;
 
     private static DataManager databaseFacade;
 
     private DatabaseFacade() {
         authors = DatabaseIO.loadAuthors();
         users = DatabaseIO.loadUsers();
-        publications = DatabaseIO.loadPublications();
+        products = DatabaseIO.loadProducts();
         libraryMembers = DatabaseIO.loadLibraryMembers();
 
         users = users == null ? new ArrayList<User>() : users;
-        publications = publications == null ? new ArrayList<Publication>() : publications;
+        products = products == null ? new ArrayList<Product>() : products;
         libraryMembers = libraryMembers == null ? new ArrayList<LibraryMember>() : libraryMembers;
         authors = authors == null ? new ArrayList<Author>() : authors;
     }
@@ -43,14 +45,15 @@ public class DatabaseFacade implements DataManager {
         return DatabaseIO.saveUsers(users);
     }
 
+    //sudeep
     @Override
-    public boolean savePublication(Publication publication) {
-        if (!publications.contains(publication)) {
-            publications.add(publication);
+    public boolean saveProduct(Product product) {
+        if (!products.contains(product)) {
+            products.add(product);
         }
-        return DatabaseIO.savePublications(publications);
+        return DatabaseIO.saveProducts(products);
     }
-
+    
     @Override
     public boolean saveLibraryMember(LibraryMember libraryMember) {
         if (!libraryMembers.contains(libraryMember)) {
@@ -78,8 +81,8 @@ public class DatabaseFacade implements DataManager {
     }
 
     @Override
-    public List<Publication> getPublications() {
-        return publications;
+    public List<Product> getProducts() {
+        return products;
     }
 
     @Override

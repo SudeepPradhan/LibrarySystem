@@ -3,10 +3,13 @@ package businesscontrollers;
 import java.time.LocalDate;
 import java.util.List;
 import models.base.Address;
-import models.business.CheckoutRecordEntry;
-import models.business.LendableCopy;
+//import models.business.CheckoutRecordEntry;
+//import models.business.LendableCopy;
 import models.business.LibraryMember;
 import models.business.User;
+
+import businessmodels.CheckoutRecordEntry;
+import businessmodels.Inventory;
 
 public interface CirculationController {
 
@@ -28,10 +31,10 @@ public interface CirculationController {
     /**
      *
      * @param memberId
-     * @param lendableCopy
+     * @param inventory
      * @return
      */
-    boolean checkout(String memberId, LendableCopy lendableCopy);
+    boolean checkout(String memberId, Inventory inventory);
 
     /**
      *

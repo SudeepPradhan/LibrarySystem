@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import models.base.Address;
 
+import businessmodels.CheckoutRecordEntry;
+import businessmodels.Inventory;
+
 public class LibraryMember implements Serializable {
 
     private String memberId;
@@ -22,15 +25,15 @@ public class LibraryMember implements Serializable {
         this.checkoutRecord = new CheckoutRecord(this);
     }
 
-    public void checkoutPublication(LendableCopy lendableCopy, LocalDate checkoutDate, LocalDate dueDate) {
-        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry(lendableCopy, checkoutDate, dueDate);
-        lendableCopy.setAvailable(false);
+    public void checkoutProduct(Inventory inventory, LocalDate checkoutDate, LocalDate dueDate) {
+        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry(inventory, checkoutDate, dueDate);
+        inventory.setAvailable(false);
         checkoutRecord.addRecord(checkoutRecordEntry);
     }
 
-    public void returnPublication(CheckoutRecordEntry checkoutRecordEntry, LocalDate returnDate) {
+    public void returnProduct(CheckoutRecordEntry checkoutRecordEntry, LocalDate returnDate) {
         checkoutRecordEntry.setReturnDate(returnDate);
-        checkoutRecordEntry.getLendableCopy().setAvailable(true);
+        checkoutRecordEntry.getInventory().setAvailable(true);
     }
 
     public void setFirstName(String firstName) {

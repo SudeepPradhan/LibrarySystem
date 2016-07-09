@@ -3,16 +3,16 @@ package models.business.publications;
 import java.io.Serializable;
 import java.util.List;
 import models.base.Author;
-import models.business.Publication;
 
-public class Book extends Publication implements Serializable {
+import businessmodels.Product;
 
-    private String isbn;
+public class Book extends Product implements Serializable {
+
+    private String name = "abc";
     private List<Author> authors;
 
-    public Book(String title, int borrowDuration, String isbn, List<Author> authors) {
-        super(title, borrowDuration);
-        this.isbn = isbn;
+    public Book(String isbn, String title, double dailyRate, double dailyFine, int borrowDuration, List<Author> authors) {
+        super(isbn, title, dailyRate, dailyFine, borrowDuration);
         this.authors = authors;
     }
 
@@ -21,11 +21,7 @@ public class Book extends Publication implements Serializable {
     }
 
     public String getIsbn() {
-        return isbn;
-    }
-    @Override
-    public String getUniqueIdentifier() {
-        return isbn;
+        return this.productId;
     }
 
     public void setAuthors(List<Author> authors) {

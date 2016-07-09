@@ -2,26 +2,21 @@ package models.business.publications;
 
 import java.io.Serializable;
 import java.util.List;
-import models.business.Publication;
 
-public class Journal extends Publication implements Serializable {
+import businessmodels.Product;
 
-    private String issn;
+public class Journal extends Product implements Serializable {
+
     private List<String> subjects;
 
     public Journal(String title, int borrowDuration, String issn, List<String> subjects) {
-        super(title, borrowDuration);
-        this.issn = issn;
+        super(issn, title, 0.0, 0.0, borrowDuration);
+        this.productId = issn;
         this.subjects = subjects;
     }
 
     public String getIssn() {
-        return issn;
-    }
-
-    @Override
-    public String getUniqueIdentifier() {
-        return issn;
+        return this.productId ;
     }
 
     public List<String> getSubjects() {

@@ -8,9 +8,10 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import models.base.Author;
 import models.business.LibraryMember;
-import models.business.Publication;
 import models.business.User;
 import utilities.ExceptionHandler;
+
+import businessmodels.Product;
 
 public class DatabaseIO {
 
@@ -28,14 +29,15 @@ public class DatabaseIO {
         List<User> users = (List<User>) readObject(USERS_PATH);
         return users;
     }
-
-    protected static boolean savePublications(List<Publication> publications) {
-        return writeObject(publications, PUBLICATIONS_PATH);
+  
+    //sudeep
+    protected static boolean saveProducts(List<Product> products) {
+        return writeObject(products, PUBLICATIONS_PATH);
     }
 
-    protected static List<Publication> loadPublications() {
-        List<Publication> publications = (List<Publication>) readObject(PUBLICATIONS_PATH);
-        return publications;
+    protected static List<Product> loadProducts() {
+        List<Product> products = (List<Product>) readObject(PUBLICATIONS_PATH);
+        return products;
     }
 
     protected static boolean saveLibraryMembers(List<LibraryMember> libraryMembers) {

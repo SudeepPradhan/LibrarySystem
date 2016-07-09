@@ -5,10 +5,12 @@ import database.DatabaseFacade;
 import java.time.LocalDate;
 import java.util.List;
 import models.base.Address;
-import models.business.CheckoutRecordEntry;
-import models.business.LendableCopy;
+//import models.business.CheckoutRecordEntry;
 import models.business.LibraryMember;
 import utilities.LibraryMemberValidation;
+
+import businessmodels.CheckoutRecordEntry;
+import businessmodels.Inventory;
 
 public class CirculationControllerImpl implements CirculationController {
 
@@ -25,21 +27,22 @@ public class CirculationControllerImpl implements CirculationController {
     }
 
     @Override
-    public boolean checkout(String memberId, LendableCopy lendableCopy) {
-        int borrowDuration = lendableCopy.getPublication().getBorrowDuration();
+    public boolean checkout(String memberId, Inventory inventory) {
+        int borrowDuration = inventory.getProduct().getBorrowDuration();
         LocalDate checkoutDate = LocalDate.now();
         LibraryMember libraryMember = searchLibraryMember(memberId);
         if (libraryMember == null) {
             return false;
         }
-        libraryMember.checkoutPublication(lendableCopy, checkoutDate, checkoutDate.plusDays(borrowDuration));
+        libraryMember.checkoutProduct(inventory, checkoutDate, checkoutDate.plusDays(borrowDuration));
         if (dataManager.saveLibraryMember(libraryMember)) {
-            return dataManager.savePublication(lendableCopy.getPublication());
+            return dataManager.saveProduct(inventory.getProduct());
         } else {
             return false;
         }
     }
 
+    //Sudeep - need to remove
     @Override
     public boolean checkin(String memberId, CheckoutRecordEntry checkoutRecordEntry) {
         LocalDate checkinDate = LocalDate.now();
@@ -47,9 +50,9 @@ public class CirculationControllerImpl implements CirculationController {
         if (libraryMember == null) {
             return false;
         }
-        libraryMember.returnPublication(checkoutRecordEntry, checkinDate);
+        libraryMember.returnProduct(checkoutRecordEntry, checkinDate);
         if (dataManager.saveLibraryMember(libraryMember)) {
-            return dataManager.savePublication(checkoutRecordEntry.getLendableCopy().getPublication());
+            return dataManager.saveProduct(checkoutRecordEntry.getInventory().getProduct());
         } else {
             return false;
         }

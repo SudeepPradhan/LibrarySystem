@@ -2,7 +2,6 @@ package businesscontrollers;
 
 import java.util.List;
 import models.base.Author;
-import models.business.Publication;
 import models.business.publications.Book;
 
 public interface PublicationController {
@@ -26,19 +25,22 @@ public interface PublicationController {
     /**
      * Adds new book.
      *
-     * @param title the title of the book.
-     * @param borrowDuration the duration of borrowing.
      * @param isbn the ISBN.
+     * @param title the title of the book.
+     * @param dailyRate the daily rate.
+     * @param dailyFine the daily fine.
+     * @param borrowDuration the duration of borrowing.
      * @param authors the list of {@link Author}s.
      * @return the added {@link Book} if the operation succeeds, false
      * otherwise.
      */
-    Book addBook(String title, int borrowDuration, String isbn, List<Author> authors);
+    Book addBook(String isbn, String title, double dailyRate, double dailyFine, int borrowDuration, List<Author> authors);
 
     public List<Book> getBooks();
 
     /**
      * @param isbn the ISBN. book
+     * @param title the title of book
      * @param borrowDuration
      * @param authors
      * @return

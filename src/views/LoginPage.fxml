@@ -44,14 +44,14 @@
                     <children>
                         <Label text="Username : " GridPane.rowIndex="1" />
                         <Button fx:id="login_button" mnemonicParsing="false" onAction="#loginButtonClicked" prefHeight="25.0" prefWidth="123.0" text="Login" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                        <TextField fx:id="username_textbox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="username_textbox" GridPane.columnIndex="1" GridPane.rowIndex="1" >superuser</TextField>
                         <Label text="Password :" GridPane.rowIndex="2" />
                         <Label fx:id="error_label" prefHeight="15.0" prefWidth="235.0" text="Error Message" textFill="RED" GridPane.columnIndex="1">
                             <font>
                                 <Font size="13.0" />
                             </font>
                         </Label>
-                        <PasswordField fx:id="password_textbox" onAction="#loginButtonClicked" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <PasswordField fx:id="password_textbox" onAction="#loginButtonClicked" GridPane.columnIndex="1" GridPane.rowIndex="2" >superuser</PasswordField>
                     </children>
                     <GridPane.margin>
                         <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />

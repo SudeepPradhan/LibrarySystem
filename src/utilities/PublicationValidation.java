@@ -3,8 +3,9 @@ package utilities;
 import java.util.List;
 import models.base.Address;
 import models.base.Author;
-import models.business.Publication;
 import models.business.publications.Book;
+
+import businessmodels.Product;
 
 public class PublicationValidation {
 
@@ -76,8 +77,8 @@ public class PublicationValidation {
     }
 
     public static boolean validateUniquIsbn(String isbn) {
-        List<Publication> publications = database.DatabaseFacade.getDataManager().getPublications();
-        for (Publication publication : publications) {
+        List<Product> publications = database.DatabaseFacade.getDataManager().getProducts();
+        for (Product publication : publications) {
             if (publication instanceof Book) {
                 if (((Book) publication).getIsbn().equals(isbn)) {
                     return false;

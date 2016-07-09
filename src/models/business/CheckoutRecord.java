@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import businessmodels.CheckoutRecordEntry;
+
 public class CheckoutRecord implements Serializable {
 
     private LibraryMember libraryMember;

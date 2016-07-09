@@ -56,7 +56,7 @@ public class LoginPageController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                username_textbox.requestFocus();;
+                username_textbox.requestFocus();
             }
         });
     }

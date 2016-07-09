@@ -42,8 +42,6 @@ import javafx.util.Callback;
 import javax.swing.JOptionPane;
 import models.base.Address;
 import models.base.Author;
-import models.business.CheckoutRecordEntry;
-import models.business.LendableCopy;
 import models.business.LibraryMember;
 import models.business.User;
 import models.business.publications.Book;
@@ -52,6 +50,8 @@ import utilities.UserValidation;
 import utilities.AuthorValidation;
 import utilities.AutoCompleteComboBoxListener;
 import utilities.LibraryMemberValidation;
+import businessmodels.CheckoutRecordEntry;
+import businessmodels.Inventory;
 
 public class MainPageController implements Initializable {
 
@@ -603,7 +603,7 @@ public class MainPageController implements Initializable {
         book_isbn_textfield.setEditable(false);
         book_isbn_textfield.setText(book.getIsbn());
         book_title_textfield.setText(book.getTitle());
-        book_numberofcopies_textfield.setText(String.valueOf(book.getNumberOfCopies()));
+        book_numberofcopies_textfield.setText(String.valueOf(book.getNumberOfAvailableInventory()));
         book_loanperiod_textfield.setText(String.valueOf(book.getBorrowDuration()));
 
         book_authorslist_listview.getItems().clear();
@@ -632,20 +632,20 @@ public class MainPageController implements Initializable {
         if (errorMessage != null) {
             book_error_label.setText(errorMessage);
         } else if (createNewBook) {
-            Book book = publicationController.addBook(book_title_textfield.getText(), borrowDuration, book_isbn_textfield.getText(), authors);
+            Book book = publicationController.addBook(book_isbn_textfield.getText(), book_title_textfield.getText(), 0.0, 0.0, borrowDuration, authors);
             if (book != null) {
                 publicationController.addCopies(book_isbn_textfield.getText(), numberOfCopies);
                 book_list_listview.getItems().add(book);
                 resetBookFieldsAndControlls();
                 book_list_listview.getSelectionModel().select(book);
             } else {
-                resetBookFieldsAndControlls();
+                resetBookFieldsAndControlls(); 
             }
         } else {
             int index = book_list_listview.getSelectionModel().getSelectedIndex();
             if (index > -1) {
                 Book book = book_list_listview.getSelectionModel().getSelectedItem();
-                int currentNumberOfCopies = book.getNumberOfCopies();
+                int currentNumberOfCopies = (int) book.getNumberOfAvailableInventory();
                 if (numberOfCopies > currentNumberOfCopies) {
                     publicationController.addCopies(book_isbn_textfield.getText(), numberOfCopies - currentNumberOfCopies);
                 } else if (numberOfCopies < currentNumberOfCopies) {
@@ -1087,12 +1087,12 @@ public class MainPageController implements Initializable {
 
         cir_checkouttable_isbn.setCellValueFactory(new Callback<CellDataFeatures<CheckoutRecordEntry, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(CellDataFeatures<CheckoutRecordEntry, String> p) {
-                return new ReadOnlyObjectWrapper(p.getValue().getLendableCopy().getPublication().getUniqueIdentifier());
+                return new ReadOnlyObjectWrapper(p.getValue().getInventory().getProduct().getProductId());
             }
         });
         cir_checkouttable_title.setCellValueFactory(new Callback<CellDataFeatures<CheckoutRecordEntry, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(CellDataFeatures<CheckoutRecordEntry, String> p) {
-                return new ReadOnlyObjectWrapper(((Book) (p.getValue().getLendableCopy().getPublication())).getTitle());
+                return new ReadOnlyObjectWrapper(((Book) (p.getValue().getInventory().getProduct())));
             }
         });
         cir_checkouttable_duedate.setCellValueFactory(new Callback<CellDataFeatures<CheckoutRecordEntry, String>, ObservableValue<String>>() {
@@ -1117,7 +1117,7 @@ public class MainPageController implements Initializable {
         cir_bookttable_loanperiod.setCellValueFactory(new PropertyValueFactory<Book, Integer>("borrowDuration"));
         cir_bookttable_copies.setCellValueFactory(new Callback<CellDataFeatures<Book, Integer>, ObservableValue<Integer>>() {
             public ObservableValue<Integer> call(CellDataFeatures<Book, Integer> p) {
-                return new ReadOnlyObjectWrapper(p.getValue().getNumberOfAvailableCopies());
+                return new ReadOnlyObjectWrapper(p.getValue().getNumberOfAvailableInventory());
             }
         });
         cir_bookttable_action.setCellFactory(new Callback<TableColumn<Book, String>, TableCell<Book, String>>() {
@@ -1166,7 +1166,7 @@ public class MainPageController implements Initializable {
             System.out.printf(format, "NO", "ISBN", "TITLE", "DUE DATE", "RETURN DATE");
             int i = 0;
             for (CheckoutRecordEntry checkoutRecordEntry : entries) {
-                System.out.printf(format, ++i + "", checkoutRecordEntry.getLendableCopy().getPublication().getUniqueIdentifier(), checkoutRecordEntry.getLendableCopy().getPublication().getTitle(), checkoutRecordEntry.getDueDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")), checkoutRecordEntry.getReturnDate() != null ? checkoutRecordEntry.getReturnDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) : "");
+                System.out.printf(format, ++i + "", checkoutRecordEntry.getInventory().getProduct().getProductId(), checkoutRecordEntry.getInventory().getProduct().getTitle(), checkoutRecordEntry.getDueDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")), checkoutRecordEntry.getReturnDate() != null ? checkoutRecordEntry.getReturnDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) : "");
             }
         }
     }
@@ -1215,7 +1215,7 @@ public class MainPageController implements Initializable {
                         return;
                     }
                     Book selectedBook = (Book) CheckoutButtonCell.this.getTableRow().getItem();
-                    LendableCopy availableCopy = selectedBook.getAvailableLendableCopy();
+                    Inventory availableCopy = selectedBook.getAvailableInventory().get(0); //sudeep
                     if (availableCopy == null) {
                         JOptionPane.showMessageDialog(null, "There are no available copies for this book", "Error", JOptionPane.ERROR_MESSAGE);
                         return;

@@ -5,9 +5,10 @@ import database.DatabaseFacade;
 import java.util.ArrayList;
 import java.util.List;
 import models.base.Author;
-import models.business.Publication;
 import models.business.publications.Book;
 import utilities.PublicationValidation;
+
+import businessmodels.Product;
 
 public class PublicationControllerImpl implements PublicationController {
 
@@ -15,11 +16,11 @@ public class PublicationControllerImpl implements PublicationController {
 
     @Override
     public Book searchBookWithIsbn(String isbn) {
-        List<Publication> publications = dataManager.getPublications();
-        for (Publication publication : publications) {
-            if (publication instanceof Book) {
-                if (((Book) publication).getIsbn().equalsIgnoreCase(isbn)) {
-                    return (Book) publication;
+        List<Product> products = dataManager.getProducts();
+        for (Product product : products) {
+            if (product instanceof Book) {
+                if (((Book) product).getIsbn().equalsIgnoreCase(isbn)) {
+                    return (Book) product;
                 }
             }
         }
@@ -28,12 +29,12 @@ public class PublicationControllerImpl implements PublicationController {
 
     @Override
     public List<Book> searchBooksWithTitle(String title) {
-        List<Publication> publications = dataManager.getPublications();
+        List<Product> products = dataManager.getProducts();
         List<Book> books = new ArrayList<Book>();
-        for (Publication publication : publications) {
-            if (publication instanceof Book) {
-                if (((Book) publication).getTitle().toLowerCase().contains(title.toLowerCase())) {
-                    books.add((Book) publication);
+        for (Product product : products) {
+            if (product instanceof Book) {
+                if (((Book) product).getTitle().toLowerCase().contains(title.toLowerCase())) {
+                    books.add((Book) product);
                 }
             }
         }
@@ -41,10 +42,10 @@ public class PublicationControllerImpl implements PublicationController {
     }
 
     @Override
-    public Book addBook(String title, int borrowDuration, String isbn, List<Author> authors) {
-        Book book = new Book(title, borrowDuration, isbn, authors);
+    public Book addBook(String isbn, String title, double dailyRate, double dailyFine, int borrowDuration, List<Author> authors) {
+        Book book = new Book(isbn, title, dailyRate, dailyFine, borrowDuration, authors);
         if (PublicationValidation.isValidBook(title, borrowDuration, isbn, authors, true)) {
-            dataManager.savePublication(book);
+            dataManager.saveProduct(book);
             return book;
         }
         return null;
@@ -52,11 +53,11 @@ public class PublicationControllerImpl implements PublicationController {
 
     @Override
     public List<Book> getBooks() {
-        List<Publication> publications = dataManager.getPublications();
+        List<Product> products = dataManager.getProducts();
         List<Book> books = new ArrayList<Book>();
-        for (Publication publication : publications) {
-            if (publication instanceof Book) {
-                books.add((Book) publication);
+        for (Product product : products) {
+            if (product instanceof Book) {
+                books.add((Book) product);
             }
         }
         return books;
@@ -68,9 +69,9 @@ public class PublicationControllerImpl implements PublicationController {
         if (book == null) {
             return false;
         }
-        book.addCopies(numberOfCopies);
+        book.addDefaultInventory(numberOfCopies);
         if (PublicationValidation.isValidBook(book.getTitle(), book.getBorrowDuration(), book.getIsbn(), book.getAuthors(), false)) {
-            return dataManager.savePublication(book);
+            return dataManager.saveProduct(book);
         }
         return false;
     }
@@ -85,7 +86,7 @@ public class PublicationControllerImpl implements PublicationController {
         book.setBorrowDuration(borrowDuration);
         book.setAuthors(authors);
         if (PublicationValidation.isValidBook(title, borrowDuration, book.getIsbn(), authors, false)) {
-            return dataManager.savePublication(book);
+            return dataManager.saveProduct(book);
         }
         return false;
     }
