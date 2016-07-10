@@ -5,7 +5,6 @@ import database.DatabaseFacade;
 import java.time.LocalDate;
 import java.util.List;
 import models.base.Address;
-//import models.business.CheckoutRecordEntry;
 import models.business.LibraryMember;
 import utilities.LibraryMemberValidation;
 

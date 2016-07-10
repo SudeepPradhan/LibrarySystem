@@ -5,30 +5,29 @@ import java.time.LocalDate;
 import models.base.Address;
 
 import businessmodels.CheckoutRecordEntry;
+import businessmodels.Customer;
 import businessmodels.Inventory;
+import decorators.CustomerDecorator;
 
-public class LibraryMember implements Serializable {
+public class LibraryMember extends CustomerDecorator implements Serializable {
 
-    private String memberId;
     private String firstName;
     private String lastName;
     private Address address;
     private String phoneNumber;
-    private CheckoutRecord checkoutRecord;
 
     public LibraryMember(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
-        this.memberId = memberId;
+        super(new Customer(memberId));
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.checkoutRecord = new CheckoutRecord(this);
     }
 
     public void checkoutProduct(Inventory inventory, LocalDate checkoutDate, LocalDate dueDate) {
         CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry(inventory, checkoutDate, dueDate);
         inventory.setAvailable(false);
-        checkoutRecord.addRecord(checkoutRecordEntry);
+        this.getCheckoutRecord().addCheckoutRecordEntry(checkoutRecordEntry);
     }
 
     public void returnProduct(CheckoutRecordEntry checkoutRecordEntry, LocalDate returnDate) {
@@ -53,7 +52,7 @@ public class LibraryMember implements Serializable {
     }
 
     public String getMemberId() {
-        return memberId;
+        return this.getCustomerId();
     }
 
     public String getFirstName() {
@@ -72,12 +71,8 @@ public class LibraryMember implements Serializable {
         return phoneNumber;
     }
 
-    public CheckoutRecord getCheckoutRecord() {
-        return checkoutRecord;
-    }
-
     @Override
     public String toString() {
-        return this.memberId;
+        return this.getCustomerId();
     }
 }
