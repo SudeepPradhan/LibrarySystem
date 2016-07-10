@@ -8,7 +8,6 @@ import businessmodels.Product;
 
 public class Book extends Product implements Serializable {
 
-    private String name = "abc";
     private List<Author> authors;
 
     public Book(String isbn, String title, double dailyRate, double dailyFine, int borrowDuration, List<Author> authors) {
@@ -28,4 +27,8 @@ public class Book extends Product implements Serializable {
         this.authors = authors;
     }
 
+        @Override
+    public String toString() {
+        return this.getTitle();
+    }
 }
