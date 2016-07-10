@@ -12,8 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import models.business.User;
+//import models.business.User;
 import utilities.ImageUtil;
+import businessmodels.User;
 
 public class LoginPageController implements Initializable {
 

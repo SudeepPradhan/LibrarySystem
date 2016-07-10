@@ -1,7 +1,8 @@
 package utilities;
 
 import java.util.List;
-import models.business.User;
+//import models.business.User;
+import businessmodels.User;
 
 public class UserValidation {
     

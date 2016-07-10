@@ -1,7 +1,8 @@
 package businesscontrollers;
 
 import java.util.List;
-import models.business.User;
+//import models.business.User;
+import businessmodels.User;
 
 public interface UserManagementController {
 

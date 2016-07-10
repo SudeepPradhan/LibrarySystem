@@ -13,8 +13,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import models.business.User;
-import utilities.ExceptionHandler;
+import businessmodels.User;
+import exceptions.ExceptionHandler;
 
 public class MPPLibraryApplication extends Application {
 
