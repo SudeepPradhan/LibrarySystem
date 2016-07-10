@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import models.base.Address;
 
 import businessmodels.CheckoutRecordEntry;
-import businessmodels.Customer;
+import businessmodels.CustomerImpl;
 import businessmodels.Inventory;
 import decorators.CustomerDecorator;
 
@@ -17,7 +17,7 @@ public class LibraryMember extends CustomerDecorator implements Serializable {
     private String phoneNumber;
 
     public LibraryMember(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
-        super(new Customer(memberId));
+        super(new CustomerImpl(memberId));
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
