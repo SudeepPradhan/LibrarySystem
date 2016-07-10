@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import models.base.Author;
 import models.business.LibraryMember;
-import models.business.User;
+//import models.business.User;
 
 import businessmodels.Product;
+import businessmodels.User;
+
 
 public class DatabaseFacade implements DataManager {
 

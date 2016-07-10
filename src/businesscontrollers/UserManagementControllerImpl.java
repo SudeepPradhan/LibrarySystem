@@ -3,10 +3,11 @@ package businesscontrollers;
 import database.DataManager;
 import database.DatabaseFacade;
 import java.util.List;
-import models.business.User;
+//import models.business.User;
 import utilities.CryptoHelper;
 import utilities.UserValidation;
 import views.MPPLibraryApplication;
+import businessmodels.User;
 
 public class UserManagementControllerImpl implements UserManagementController {
 
@@ -26,7 +27,7 @@ public class UserManagementControllerImpl implements UserManagementController {
     }
 
     @Override
-    public boolean createUser(String username, String password, User.UserType userType) {
+    public boolean createUser(String username, String password, businessmodels.User.UserType userType) {
         User user = new User(username, password, userType);
         if (UserValidation.isValid(user)) {
             user.setPassword(CryptoHelper.getSha1Hash(password));

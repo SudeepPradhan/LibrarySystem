@@ -43,7 +43,7 @@ import javax.swing.JOptionPane;
 import models.base.Address;
 import models.base.Author;
 import models.business.LibraryMember;
-import models.business.User;
+import businessmodels.User;
 import models.business.publications.Book;
 import utilities.PublicationValidation;
 import utilities.UserValidation;

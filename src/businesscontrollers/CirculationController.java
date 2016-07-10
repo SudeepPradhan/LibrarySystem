@@ -6,7 +6,6 @@ import models.base.Address;
 //import models.business.CheckoutRecordEntry;
 //import models.business.LendableCopy;
 import models.business.LibraryMember;
-import models.business.User;
 
 import businessmodels.CheckoutRecordEntry;
 import businessmodels.Inventory;
