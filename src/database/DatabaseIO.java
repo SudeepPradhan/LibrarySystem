@@ -13,7 +13,9 @@ import exceptions.ExceptionHandler;
 
 import interfaces.Product;
 import businessmodels.User;
-public class DatabaseIO {
+import interfaces.CORExceptionHandler;
+
+public class DatabaseIO extends CORExceptionHandler {
 
     private static final String OUTPUT_DIR = System.getProperty("user.dir") + "\\storage";
     private static final String USERS_PATH = OUTPUT_DIR + "\\users.ser";
@@ -29,7 +31,7 @@ public class DatabaseIO {
         List<User> users = (List<User>) readObject(USERS_PATH);
         return users;
     }
-  
+
     //sudeep
     protected static boolean saveProducts(List<Product> products) {
         return writeObject(products, PUBLICATIONS_PATH);
@@ -87,6 +89,16 @@ public class DatabaseIO {
         } finally {
             return object;
         }
+    }
+
+    @Override
+    public void handleRequest(Exception e) {
+        if (nextHandler != null) {
+            nextHandler.handleRequest(e);
+        } else {
+            throw new IllegalArgumentException("No handler found for :: " + e.getMessage());
+        }
+        nextHandler.handleRequest(e);
     }
 
 }
