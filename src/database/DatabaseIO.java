@@ -13,9 +13,8 @@ import exceptions.ExceptionHandler;
 
 import interfaces.Product;
 import businessmodels.User;
-import interfaces.CORExceptionHandler;
 
-public class DatabaseIO extends CORExceptionHandler {
+public class DatabaseIO {
 
     private static final String OUTPUT_DIR = System.getProperty("user.dir") + "\\storage";
     private static final String USERS_PATH = OUTPUT_DIR + "\\users.ser";
@@ -90,15 +89,4 @@ public class DatabaseIO extends CORExceptionHandler {
             return object;
         }
     }
-
-    @Override
-    public void handleRequest(Exception e) {
-        if (nextHandler != null) {
-            nextHandler.handleRequest(e);
-        } else {
-            throw new IllegalArgumentException("No handler found for :: " + e.getMessage());
-        }
-        nextHandler.handleRequest(e);
-    }
-
 }
