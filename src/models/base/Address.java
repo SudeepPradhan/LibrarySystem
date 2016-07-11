@@ -1,8 +1,12 @@
 package models.base;
 
+import Validation.AddressValidation;
+import Validation.Validatable;
+import Validation.ValidateOutput;
+import Validation.Validator;
 import java.io.Serializable;
 
-public class Address implements Serializable {
+public class Address implements Validatable<Address>, Serializable {
 
     private String street;
     private String city;
@@ -30,5 +34,14 @@ public class Address implements Serializable {
 
     public String getZip() {
         return zip;
+    }
+
+    @Override
+    public ValidateOutput validate(Validator<Address> validator) {
+        return validator.isValid(this);
+    }
+
+    public ValidateOutput validate(AddressValidation addressValidation, String addressValidationResult) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

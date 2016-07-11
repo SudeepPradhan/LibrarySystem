@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import models.base.Address;
 import models.business.LibraryMember;
-import utilities.LibraryMemberValidation;
+import Validation.LibraryMemberValidation;
 
 import businessmodels.CheckoutRecordEntry;
 import businessmodels.Inventory;
@@ -60,7 +60,7 @@ public class CirculationControllerImpl implements CirculationController {
     @Override
     public boolean addLibraryMember(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
         LibraryMember libraryMember = new LibraryMember(memberId, firstName, lastName, address, phoneNumber);
-        if (LibraryMemberValidation.isValid(libraryMember)) {
+        if (libraryMember.validate(new LibraryMemberValidation()).isValid()) {
             return dataManager.saveLibraryMember(libraryMember);
         }
         return false;
@@ -76,7 +76,7 @@ public class CirculationControllerImpl implements CirculationController {
         libraryMember.setLastName(lastName);
         libraryMember.setAddress(address);
         libraryMember.setPhoneNumber(phoneNumber);
-        if (LibraryMemberValidation.isValid(libraryMember)) {
+        if (libraryMember.validate(new LibraryMemberValidation()).isValid()) {
             return dataManager.saveLibraryMember(libraryMember);
         }
         return false;

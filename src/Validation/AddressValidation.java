@@ -1,8 +1,8 @@
-package utilities;
+package Validation;
 
 import models.base.Address;
 
-public class AddressValidation {
+public class AddressValidation implements Validator<Address> {
 
     private static final int MIN_ZIP_LENGTH = 5;
 
@@ -24,11 +24,7 @@ public class AddressValidation {
         return validateBlank(zip) && zip.length() >= MIN_ZIP_LENGTH && validateNumeric(zip);
     }
 
-    public static boolean isValid(Address address) {
-        return validate(address.getStreet(), address.getCity(), address.getState(), address.getZip()) == null;
-    }
-
-    public static String validate(String street, String city, String state, String zip) {
+    private static String validate(String street, String city, String state, String zip) {
         if (!validateBlank(street)) {
             return "Street cannot be blank";
         }
@@ -44,4 +40,9 @@ public class AddressValidation {
         return null;
     }
 
+    @Override
+    public ValidateOutput isValid(Address address) {
+        String error =  validate(address.getStreet(), address.getCity(), address.getState(), address.getZip());
+        return new ValidateOutputImpl(error == null, error);
+    }
 }
