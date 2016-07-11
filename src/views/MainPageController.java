@@ -45,11 +45,11 @@ import models.base.Author;
 import models.business.LibraryMember;
 import businessmodels.User;
 import models.business.publications.Book;
-import utilities.PublicationValidation;
-import utilities.UserValidation;
-import utilities.AuthorValidation;
+import Validation.PublicationValidation;
+import Validation.UserValidation;
+import Validation.AuthorValidation;
 import utilities.AutoCompleteComboBoxListener;
-import utilities.LibraryMemberValidation;
+import Validation.LibraryMemberValidation;
 import businessmodels.CheckoutRecordEntry;
 import businessmodels.Inventory;
 
@@ -361,25 +361,24 @@ public class MainPageController implements Initializable {
         String _memberCity = lib_mem_city_textbox.getText();
         String _memberZip = lib_mem_zip_textbox.getText();
 
-        String validation = LibraryMemberValidation.validate(
-                _memberFirstName,
-                _memberLastName,
-                _memberPhone,
-                _memberStreet,
-                _memberCity,
-                _memberState,
-                _memberZip);
-
-        if (validation != null) {
+        Address _memberAddress = new Address(
+                                        _memberStreet,
+                                        _memberCity,
+                                        _memberState,
+                                        _memberZip);
+                
+        LibraryMember libraryMember = new LibraryMember(
+                _memberId, 
+                _memberFirstName, 
+                _memberLastName, 
+                _memberAddress, 
+                _memberPhone);
+        
+        String validation = "";
+         if (!libraryMember.validate(new LibraryMemberValidation(), validation)) {
             lib_mem_error_label.setText(validation);
             return;
         }
-
-        Address _memberAddress = new Address(
-                _memberStreet,
-                _memberCity,
-                _memberState,
-                _memberZip);
 
         if (Integer.parseInt(_memberId) <= gettLibraryMemberSize()) {
             circulationController.updateLibraryMember(
@@ -883,15 +882,44 @@ public class MainPageController implements Initializable {
         String state = author_state_textbox.getText();
         String zip = author_zip_textbox.getText();
         String error = null;
-        Address address = null;
-        if (state.isEmpty() && city.isEmpty() && street.isEmpty() && zip.isEmpty()) {
-            error = AuthorValidation.validate(author_firstname_textbox.getText(), author_lastname_textbox.getText(), author_phone_textbox.getText(), author_credential_textbox.getText(), author_biography_textbox.getText());
-        } else {
-            address = new Address(street, city, state, zip);
-            error = AuthorValidation.validate(author_firstname_textbox.getText(), author_lastname_textbox.getText(), author_phone_textbox.getText(), author_credential_textbox.getText(), author_biography_textbox.getText(), street, city, state, zip);
-        }
+        Address address = new Address(street, city, state, zip);
 
-        if (error != null) {
+        Author author = new Author(
+                                author_firstname_textbox.getText(), 
+                                author_lastname_textbox.getText(), 
+                                address, 
+                                author_phone_textbox.getText(), 
+                                author_credential_textbox.getText(), 
+                                author_biography_textbox.getText());
+
+        boolean result = author.validate(new AuthorValidation(), error);
+            
+//        if (state.isEmpty() && city.isEmpty() && street.isEmpty() && zip.isEmpty()) {
+//            Author author = new Author(
+//                    author_firstname_textbox.getText(), 
+//                    author_lastname_textbox.getText(), 
+//                    address, 
+//                    author_phone_textbox.getText(), 
+//                    author_credential_textbox.getText(), 
+//                    author_biography_textbox.getText());
+////            error = AuthorValidation.validate(author_firstname_textbox.getText(),
+////                    author_lastname_textbox.getText(), 
+////                    author_phone_textbox.getText(), 
+////                    author_credential_textbox.getText(), author_biography_textbox.getText());
+//
+//            author.validate(new AuthorValidation(), error);
+//        } else {
+//            address = new Address(street, city, state, zip);
+//            error = AuthorValidation.validate(
+//                    author_firstname_textbox.getText(), 
+//                    author_lastname_textbox.getText(), 
+//                    author_phone_textbox.getText(), 
+//                    author_credential_textbox.getText(), 
+//                    author_biography_textbox.getText(), 
+//                    address);
+//        }
+
+        if (!result) {
             author_error_label.setText(error);
             return;
         }

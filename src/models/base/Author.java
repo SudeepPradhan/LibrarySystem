@@ -1,8 +1,10 @@
 package models.base;
 
+import Validation.Validatable;
+import Validation.Validator;
 import java.io.Serializable;
 
-public class Author implements Serializable {
+public class Author implements Validatable<Author>,Serializable {
 
     private String firstName;
     private String lastName;
@@ -83,4 +85,8 @@ public class Author implements Serializable {
         return getFirstName() + " " + getLastName();
     }
 
+    @Override
+    public boolean validate(Validator<Author> validator, String error) {
+        return validator.isValid(this, error);
+    }
 }

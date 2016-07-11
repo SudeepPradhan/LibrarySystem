@@ -1,8 +1,9 @@
-package utilities;
+package Validation;
 
+import models.base.Address;
 import models.business.LibraryMember;
 
-public class LibraryMemberValidation {
+public class LibraryMemberValidation implements Validator<LibraryMember> {
 
     private static final int MIN_PHONE_LENGTH = 10;
 
@@ -28,24 +29,18 @@ public class LibraryMemberValidation {
         return validateBlank(phoneNumber) && phoneNumber.length() >= MIN_PHONE_LENGTH && validateNumeric(phoneNumber);
     }
 
-    public static boolean isValid(LibraryMember libraryMember) {
-        if (libraryMember == null || libraryMember.getAddress() == null) {
-            return false;
-        }
-        return validate(libraryMember.getMemberId(), libraryMember.getFirstName(), libraryMember.getLastName(), libraryMember.getPhoneNumber(), libraryMember.getAddress().getStreet(), libraryMember.getAddress().getCity(), libraryMember.getAddress().getState(), libraryMember.getAddress().getZip()) == null;
-    }
-
-    public static String validate(String memberId, String firstName, String lastName, String phoneNumber, String street, String city, String state, String zip) {
+    public static String validate(String memberId, String firstName, String lastName, String phoneNumber, 
+            Address address) {
         if (!validateBlank(memberId)) {
             return "Member ID cannot be blank";
         }
         if (!validateUniqueMemberId(memberId)) {
             return "Member ID already exists";
         }
-        return validate(firstName, lastName, phoneNumber, street, city, state, zip);
+        return validate(firstName, lastName, phoneNumber, address);
     }
 
-    public static String validate(String firstName, String lastName, String phoneNumber, String street, String city, String state, String zip) {
+    public static String validate(String firstName, String lastName, String phoneNumber, Address address) {
         if (!validateBlank(firstName)) {
             return "First name cannot be blank";
         }
@@ -55,10 +50,21 @@ public class LibraryMemberValidation {
         if (!validatePhoneNumber(phoneNumber)) {
             return "Phone number must be numeric and at least " + MIN_PHONE_LENGTH + " digits";
         }
-        String addressValidationResult = AddressValidation.validate(street, city, state, zip);
-        if (addressValidationResult != null) {
+        String addressValidationResult = "";
+        boolean result = address.validate(new AddressValidation(), addressValidationResult);
+        if (!result) {
             return addressValidationResult;
         }
         return null;
+    }
+ 
+    @Override
+    public boolean isValid(LibraryMember libraryMember, String error) {
+        if (libraryMember == null || libraryMember.getAddress() == null) {
+            return false;
+        }
+        return validate(libraryMember.getMemberId(), libraryMember.getFirstName(), 
+                libraryMember.getLastName(), libraryMember.getPhoneNumber(), 
+                libraryMember.getAddress()) == null;
     }
 }

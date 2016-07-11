@@ -1,8 +1,9 @@
-package utilities;
+package Validation;
 
+import models.base.Address;
 import models.base.Author;
 
-public class AuthorValidation {
+public class AuthorValidation implements Validator<Author> {
 
     private static final int MIN_PHONE_LENGTH = 10;
 
@@ -24,30 +25,22 @@ public class AuthorValidation {
         return validateBlank(phoneNumber) && phoneNumber.length() >= MIN_PHONE_LENGTH && validateNumeric(phoneNumber);
     }
 
-    public static boolean isValid(Author author, boolean validateAddress) {
-        if (author == null || (validateAddress && author.getAddress() == null)) {
-            return false;
-        }
-        if (validateAddress) {
-            return validate(author.getFirstName(), author.getLastName(), author.getPhoneNumber(), author.getCredentials(), author.getBiography(), author.getAddress().getStreet(), author.getAddress().getCity(), author.getAddress().getState(), author.getAddress().getZip()) == null;
-        } else {
-            return validate(author.getFirstName(), author.getLastName(), author.getPhoneNumber(), author.getCredentials(), author.getBiography()) == null;
-        }
-    }
-
-    public static String validate(String firstName, String lastName, String phoneNumber, String credentials, String biography, String street, String city, String state, String zip) {
+    private static String validate(String firstName, String lastName, String phoneNumber, 
+            String credentials, String biography, Address address) {
         String validation = validate(firstName, lastName, phoneNumber, credentials, biography);
         if (validation != null) {
             return validation;
         }
-        String addressValidationResult = AddressValidation.validate(street, city, state, zip);
-        if (addressValidationResult != null) {
+        String addressValidationResult = "";
+        boolean result = address.validate(new AddressValidation(), addressValidationResult);
+        if (!result) {
             return addressValidationResult;
         }
         return null;
     }
 
-    public static String validate(String firstName, String lastName, String phoneNumber, String credentials, String biography) {
+    private static String validate(String firstName, String lastName, String phoneNumber, 
+            String credentials, String biography) {
         if (!validateBlank(firstName)) {
             return "First name cannot be blank";
         }
@@ -66,4 +59,17 @@ public class AuthorValidation {
         return null;
     }
 
+    @Override
+    public boolean isValid(Author author, String error) {
+        if (author == null) {
+            return false;
+        }
+        if (author.getAddress() != null) {
+            return validate(author.getFirstName(), author.getLastName(), author.getPhoneNumber(), 
+                    author.getCredentials(), author.getBiography(), author.getAddress()) == null;
+        } else {
+            return validate(author.getFirstName(), author.getLastName(), author.getPhoneNumber(), 
+                    author.getCredentials(), author.getBiography()) == null;
+        }
+    }
 }

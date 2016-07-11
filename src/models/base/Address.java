@@ -1,8 +1,10 @@
 package models.base;
 
+import Validation.Validatable;
+import Validation.Validator;
 import java.io.Serializable;
 
-public class Address implements Serializable {
+public class Address implements Validatable<Address>, Serializable {
 
     private String street;
     private String city;
@@ -30,5 +32,10 @@ public class Address implements Serializable {
 
     public String getZip() {
         return zip;
+    }
+
+    @Override
+    public boolean validate(Validator<Address> validator, String error) {
+        return validator.isValid(this, null);
     }
 }

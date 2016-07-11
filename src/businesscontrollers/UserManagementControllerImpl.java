@@ -5,7 +5,7 @@ import database.DatabaseFacade;
 import java.util.List;
 //import models.business.User;
 import utilities.CryptoHelper;
-import utilities.UserValidation;
+import Validation.UserValidation;
 import views.MPPLibraryApplication;
 import businessmodels.User;
 
