@@ -5,7 +5,7 @@ import models.base.Author;
 import models.business.LibraryMember;
 //import models.business.User;
 
-import businessmodels.Product;
+import interfaces.Product;
 import businessmodels.User;
 
 public interface DataManager {
