@@ -8,6 +8,7 @@ import businessmodels.CheckoutRecordEntry;
 import businessmodels.CustomerImpl;
 import businessmodels.Inventory;
 import decorators.CustomerDecorator;
+import utilities.LogOutput;
 
 public class LibraryMember extends CustomerDecorator implements Serializable {
 
@@ -22,17 +23,23 @@ public class LibraryMember extends CustomerDecorator implements Serializable {
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        
+        LogOutput.getLogger().info("Library Member constructor");
     }
 
     public void checkoutProduct(Inventory inventory, LocalDate checkoutDate, LocalDate dueDate) {
         CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry(inventory, checkoutDate, dueDate);
         inventory.setAvailable(false);
         this.getCheckoutRecord().addCheckoutRecordEntry(checkoutRecordEntry);
+ 
+        LogOutput.getLogger().info("Library Member checkoutProduct method");
     }
 
     public void returnProduct(CheckoutRecordEntry checkoutRecordEntry, LocalDate returnDate) {
         checkoutRecordEntry.setReturnDate(returnDate);
         checkoutRecordEntry.getInventory().setAvailable(true);
+        
+        LogOutput.getLogger().info("Library Member returnProduct method");
     }
 
     public void setFirstName(String firstName) {

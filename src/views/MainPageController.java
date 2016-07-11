@@ -74,7 +74,7 @@ public class MainPageController implements Initializable {
         setInitialAuthorState();
         setInitialCirculationState();
     }
-
+        
     private void clearInitialValues() {
         user_error_label.setText("");
         main_username_label.setText("");
