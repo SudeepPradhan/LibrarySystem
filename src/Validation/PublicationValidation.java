@@ -6,8 +6,9 @@ import models.base.Author;
 import models.business.publications.Book;
 
 import interfaces.Product;
+import models.business.LibraryMember;
 
-public class PublicationValidation {
+public class PublicationValidation implements Validator<LibraryMember>{
 
     private static int MIN_BOOK_TITLE_LENGTH = 1;
     private static int MAX_BORROW_DURATION = 21;
@@ -86,5 +87,10 @@ public class PublicationValidation {
             }
         }
         return true;
+    }
+
+    @Override
+    public ValidateOutput isValid(LibraryMember entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
