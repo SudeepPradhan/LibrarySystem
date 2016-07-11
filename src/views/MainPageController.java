@@ -1120,7 +1120,7 @@ public class MainPageController implements Initializable {
         });
         cir_checkouttable_title.setCellValueFactory(new Callback<CellDataFeatures<CheckoutRecordEntry, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(CellDataFeatures<CheckoutRecordEntry, String> p) {
-                return new ReadOnlyObjectWrapper(((Book) (p.getValue().getInventory().getProduct())));
+                return new ReadOnlyObjectWrapper(((p.getValue().getInventory().getProduct())));
             }
         });
         cir_checkouttable_duedate.setCellValueFactory(new Callback<CellDataFeatures<CheckoutRecordEntry, String>, ObservableValue<String>>() {

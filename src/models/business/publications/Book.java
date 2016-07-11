@@ -28,7 +28,7 @@ public class Book extends ProductDecorator implements Serializable {
         this.authors = authors;
     }
 
-        @Override
+    @Override
     public String toString() {
         return this.getTitle();
     }
