@@ -41,8 +41,8 @@ public class AddressValidation implements Validator<Address> {
     }
 
     @Override
-    public boolean isValid(Address address, String error) {
-        error = validate(address.getStreet(), address.getCity(), address.getState(), address.getZip());
-        return error == null;
+    public ValidateOutput isValid(Address address) {
+        String error =  validate(address.getStreet(), address.getCity(), address.getState(), address.getZip());
+        return new ValidateOutputImpl(error == null, error);
     }
 }

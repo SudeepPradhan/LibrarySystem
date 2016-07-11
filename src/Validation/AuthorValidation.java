@@ -31,10 +31,10 @@ public class AuthorValidation implements Validator<Author> {
         if (validation != null) {
             return validation;
         }
-        String addressValidationResult = "";
-        boolean result = address.validate(new AddressValidation(), addressValidationResult);
-        if (!result) {
-            return addressValidationResult;
+        
+        ValidateOutput result = address.validate(new AddressValidation());
+        if (!result.isValid()) {
+            return result.getError();
         }
         return null;
     }
@@ -60,16 +60,28 @@ public class AuthorValidation implements Validator<Author> {
     }
 
     @Override
-    public boolean isValid(Author author, String error) {
+    public ValidateOutput isValid(Author author) {
         if (author == null) {
-            return false;
+            return new ValidateOutputImpl(false, "");
         }
+        String error = null;
         if (author.getAddress() != null) {
-            return validate(author.getFirstName(), author.getLastName(), author.getPhoneNumber(), 
-                    author.getCredentials(), author.getBiography(), author.getAddress()) == null;
+            error = validate(
+                    author.getFirstName(), 
+                    author.getLastName(), 
+                    author.getPhoneNumber(), 
+                    author.getCredentials(), 
+                    author.getBiography(), 
+                    author.getAddress());
         } else {
-            return validate(author.getFirstName(), author.getLastName(), author.getPhoneNumber(), 
-                    author.getCredentials(), author.getBiography()) == null;
+            error = validate(
+                    author.getFirstName(), 
+                    author.getLastName(), 
+                    author.getPhoneNumber(), 
+                    author.getCredentials(), 
+                    author.getBiography());
         }
+        
+        return new ValidateOutputImpl(error == null, error);
     }
 }

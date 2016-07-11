@@ -60,7 +60,7 @@ public class CirculationControllerImpl implements CirculationController {
     @Override
     public boolean addLibraryMember(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
         LibraryMember libraryMember = new LibraryMember(memberId, firstName, lastName, address, phoneNumber);
-        if (libraryMember.validate(new LibraryMemberValidation(), null)) {
+        if (libraryMember.validate(new LibraryMemberValidation()).isValid()) {
             return dataManager.saveLibraryMember(libraryMember);
         }
         return false;
@@ -76,7 +76,7 @@ public class CirculationControllerImpl implements CirculationController {
         libraryMember.setLastName(lastName);
         libraryMember.setAddress(address);
         libraryMember.setPhoneNumber(phoneNumber);
-        if (libraryMember.validate(new LibraryMemberValidation(), null)) {
+        if (libraryMember.validate(new LibraryMemberValidation()).isValid()) {
             return dataManager.saveLibraryMember(libraryMember);
         }
         return false;

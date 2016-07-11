@@ -1,6 +1,7 @@
 package models.business;
 
 import Validation.Validatable;
+import Validation.ValidateOutput;
 import Validation.Validator;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -86,7 +87,7 @@ public class LibraryMember extends CustomerDecorator implements Validatable<Libr
     }
 
     @Override
-    public boolean validate(Validator<LibraryMember> validator, String error) {
-        return validator.isValid(this, error);
+    public ValidateOutput validate(Validator<LibraryMember> validator) {
+        return validator.isValid(this);
     }
 }

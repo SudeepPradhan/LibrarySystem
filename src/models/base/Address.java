@@ -1,6 +1,8 @@
 package models.base;
 
+import Validation.AddressValidation;
 import Validation.Validatable;
+import Validation.ValidateOutput;
 import Validation.Validator;
 import java.io.Serializable;
 
@@ -35,7 +37,11 @@ public class Address implements Validatable<Address>, Serializable {
     }
 
     @Override
-    public boolean validate(Validator<Address> validator, String error) {
-        return validator.isValid(this, null);
+    public ValidateOutput validate(Validator<Address> validator) {
+        return validator.isValid(this);
+    }
+
+    public ValidateOutput validate(AddressValidation addressValidation, String addressValidationResult) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

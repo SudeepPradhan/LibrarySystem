@@ -50,21 +50,23 @@ public class LibraryMemberValidation implements Validator<LibraryMember> {
         if (!validatePhoneNumber(phoneNumber)) {
             return "Phone number must be numeric and at least " + MIN_PHONE_LENGTH + " digits";
         }
-        String addressValidationResult = "";
-        boolean result = address.validate(new AddressValidation(), addressValidationResult);
-        if (!result) {
-            return addressValidationResult;
+
+        ValidateOutput result = address.validate(new AddressValidation());
+        if (!result.isValid()) {
+            return result.getError();
         }
         return null;
     }
  
     @Override
-    public boolean isValid(LibraryMember libraryMember, String error) {
+    public ValidateOutput isValid(LibraryMember libraryMember) {
         if (libraryMember == null || libraryMember.getAddress() == null) {
-            return false;
+            return new ValidateOutputImpl(false, "");
         }
-        return validate(libraryMember.getMemberId(), libraryMember.getFirstName(), 
-                libraryMember.getLastName(), libraryMember.getPhoneNumber(), 
-                libraryMember.getAddress()) == null;
+        String error =  validate(libraryMember.getMemberId(), libraryMember.getFirstName(), 
+                                    libraryMember.getLastName(), libraryMember.getPhoneNumber(), 
+                                    libraryMember.getAddress());
+        
+        return new ValidateOutputImpl(error == null, error);
     }
 }

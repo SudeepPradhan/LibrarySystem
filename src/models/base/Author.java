@@ -1,6 +1,7 @@
 package models.base;
 
 import Validation.Validatable;
+import Validation.ValidateOutput;
 import Validation.Validator;
 import java.io.Serializable;
 
@@ -86,7 +87,7 @@ public class Author implements Validatable<Author>,Serializable {
     }
 
     @Override
-    public boolean validate(Validator<Author> validator, String error) {
-        return validator.isValid(this, error);
+    public ValidateOutput validate(Validator<Author> validator) {
+        return validator.isValid(this);
     }
 }

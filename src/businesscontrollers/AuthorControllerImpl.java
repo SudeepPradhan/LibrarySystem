@@ -15,7 +15,7 @@ public class AuthorControllerImpl implements AuthorController {
     @Override
     public boolean createAuthor(String firstName, String lastName, Address address, String phoneNumber, String credentials, String biography) {
         Author author = new Author(firstName, lastName, address, phoneNumber, credentials, biography);
-        if (author.validate(new AuthorValidation(), null)) {
+        if (author.validate(new AuthorValidation()).isValid()) {
             return dataManager.saveAuthor(author);
         }
         return false;
@@ -32,7 +32,7 @@ public class AuthorControllerImpl implements AuthorController {
         author.setPhoneNumber(phoneNumber);
         author.setCredentials(credentials);
         author.setBiography(biography);
-        if (author.validate(new AuthorValidation(), null)) {
+        if (author.validate(new AuthorValidation()).isValid()) {
             return dataManager.saveAuthor(author);
         }
         return false;
