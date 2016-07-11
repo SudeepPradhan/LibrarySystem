@@ -5,7 +5,7 @@ import models.base.Address;
 import models.base.Author;
 import models.business.publications.Book;
 
-import businessmodels.Product;
+import interfaces.Product;
 
 public class PublicationValidation {
 

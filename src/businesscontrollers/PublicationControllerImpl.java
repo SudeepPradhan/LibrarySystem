@@ -8,7 +8,7 @@ import models.base.Author;
 import models.business.publications.Book;
 import Validation.PublicationValidation;
 
-import businessmodels.Product;
+import interfaces.Product;
 
 public class PublicationControllerImpl implements PublicationController {
 
