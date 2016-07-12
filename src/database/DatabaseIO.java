@@ -8,10 +8,9 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import models.base.Author;
 import models.business.LibraryMember;
-import exceptions.ExceptionHandler;
-
 import interfaces.Product;
 import businessmodels.User;
+import exceptions.ChainBuilder;
 
 public class DatabaseIO {
 
@@ -67,7 +66,8 @@ public class DatabaseIO {
             fileOut.close();
             return true;
         } catch (IOException e) {
-            ExceptionHandler.handleDatabaseIOException(e);
+            ChainBuilder chain = new ChainBuilder();
+            chain.getHandler().handleRequest(e);
             return false;
         }
     }
@@ -80,10 +80,9 @@ public class DatabaseIO {
             object = in.readObject();
             in.close();
             fileIn.close();
-        } catch (IOException e) {
-            ExceptionHandler.handleDatabaseIOException(e);
-        } catch (ClassNotFoundException e) {
-            ExceptionHandler.handleDatabaseIOException(e);
+        } catch (Exception e) {
+            ChainBuilder chain = new ChainBuilder();
+            chain.getHandler().handleRequest(e);
         } finally {
             return object;
         }
