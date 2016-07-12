@@ -1,5 +1,6 @@
 package models.business.publications;
 
+import Validation.Validatable;
 import businessmodels.ProductImpl;
 import decorators.ProductDecorator;
 import java.io.Serializable;
@@ -81,5 +82,4 @@ public abstract class Publication extends ProductDecorator implements Serializab
     public String toString() {
         return title;
     }
-
 }

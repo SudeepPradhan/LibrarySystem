@@ -595,7 +595,6 @@ public class MainPageController implements Initializable {
     }
 
     private void showBookDetails(Book book) {
-
         resetBookFieldsAndControlls();
 
         book_edit_button.setDisable(false);
@@ -1183,19 +1182,7 @@ public class MainPageController implements Initializable {
     @FXML
     void cir_print_buttonclick(ActionEvent event) {
         if (selectedCirculationMember != null) {
-            List<CheckoutRecordEntry> entries = selectedCirculationMember.getCheckoutRecord().getCheckoutRecordEntries();
-            if (entries.isEmpty()) {
-                return;
-            }
-            System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
-            System.out.println("Checkout record for " + selectedCirculationMember.getMemberId() + " - " + selectedCirculationMember.getFirstName() + " " + selectedCirculationMember.getLastName());
-            System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
-            String format = "%-3s%-18s%-80s%-12s%-12s\n";
-            System.out.printf(format, "NO", "ISBN", "TITLE", "DUE DATE", "RETURN DATE");
-            int i = 0;
-            for (CheckoutRecordEntry checkoutRecordEntry : entries) {
-                System.out.printf(format, ++i + "", checkoutRecordEntry.getInventory().getProduct().getProductId(), checkoutRecordEntry.getInventory().getProduct().getTitle(), checkoutRecordEntry.getDueDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")), checkoutRecordEntry.getReturnDate() != null ? checkoutRecordEntry.getReturnDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) : "");
-            }
+            System.out.print(selectedCirculationMember.getCheckoutRecord().PrintOutString(0, null));
         }
     }
 
