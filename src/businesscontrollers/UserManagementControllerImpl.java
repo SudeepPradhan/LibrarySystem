@@ -27,7 +27,7 @@ public class UserManagementControllerImpl implements UserManagementController {
     }
 
     @Override
-    public boolean createUser(String username, String password, businessmodels.User.UserType userType) {
+    public boolean createUser(String username, String password, String userType) {
         User user = new User(username, password, userType);
         if (UserValidation.isValid(user)) {
             user.setPassword(CryptoHelper.getSha1Hash(password));
@@ -42,7 +42,7 @@ public class UserManagementControllerImpl implements UserManagementController {
     }
 
     @Override
-    public boolean updateUser(String username, String password, User.UserType userType) {
+    public boolean updateUser(String username, String password, String userType) {
         if (username == null || userType == null || !UserValidation.validatePassword(password)) {
             return false;
         }

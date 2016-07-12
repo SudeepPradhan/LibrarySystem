@@ -31,7 +31,7 @@ public class UserValidation {
         return validate(user.getUsername(), user.getPassword(), user.getPassword(), user.getUserType()) == null;
     }
     
-    public static String validate(String username, String password, String repeatPassword, User.UserType usertype) {
+    public static String validate(String username, String password, String repeatPassword, String usertype) {
         if (!validateUsername(username)) {
             return "Username must be at least " + MIN_USER_NAME_LENGTH + " characters";
         }
@@ -41,7 +41,7 @@ public class UserValidation {
         return validate(password, repeatPassword, usertype);
     }
     
-    public static String validate(String password, String repeatPassword, User.UserType usertype) {
+    public static String validate(String password, String repeatPassword, String usertype) {
         if (!validatePassword(password)) {
             return "Password must be at least " + MIN_PASSWORD_LENGTH + " characters";
         }
@@ -50,9 +50,6 @@ public class UserValidation {
         }
         if (usertype == null) {
             return "Usertype can not be blank";
-        }
-        if (usertype == null) {
-            return "Usertype cannot be blank";
         }
         return null;
     }

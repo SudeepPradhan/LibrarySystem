@@ -1,5 +1,6 @@
 package views;
 
+import businesscontrollers.AppUserType;
 import businesscontrollers.UserManagementController;
 import businesscontrollers.UserManagementControllerImpl;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import businessmodels.User;
+import businessmodels.UserType;
 import exceptions.ExceptionHandler;
 
 public class MPPLibraryApplication extends Application {
@@ -24,7 +26,7 @@ public class MPPLibraryApplication extends Application {
     private static Tab userTab, libMemberTab, bookTab, authorTab, circulationTab;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) {        
         try {
             loginPane = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
             mainPane = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
@@ -79,17 +81,17 @@ public class MPPLibraryApplication extends Application {
             showLoginPane();
             return;
         }
-
+        UserType userType = new AppUserType();
         ObservableList<Tab> tabList = getTabList();
         tabList.removeAll(tabList);
-        if (loginUser.getUserType() == User.UserType.LIBRARIAN) {
+        if (loginUser.getUserType().equalsIgnoreCase(userType.selectType(0))) {
             tabList.add(circulationTab);
         } else {
             tabList.add(userTab);
             tabList.add(libMemberTab);
             tabList.add(bookTab);
             tabList.add(authorTab);
-            if (loginUser.getUserType() == User.UserType.BOTH) {
+            if (loginUser.getUserType().equalsIgnoreCase(userType.selectType(2))) {
                 tabList.add(circulationTab);
             }
         }
@@ -109,13 +111,14 @@ public class MPPLibraryApplication extends Application {
         UserManagementController controller = new UserManagementControllerImpl();
         List<User> users = controller.getUsers();
         boolean hasAdminUser = false;
+        UserType userType = new AppUserType();
         for (User user : users) {
-            if (user.getUserType() != User.UserType.LIBRARIAN) {
+            if (user.getUserType().equalsIgnoreCase(userType.selectType(0))) {
                 hasAdminUser = true;
             }
         }
         if (!hasAdminUser) {
-            controller.createUser("superuser", "superuser", User.UserType.BOTH);
+            controller.createUser("superuser", "superuser", userType.selectType(2));
         }
     }
 }

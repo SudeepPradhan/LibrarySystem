@@ -51,8 +51,10 @@ import Validation.AuthorValidation;
 import utilities.AutoCompleteComboBoxListener;
 import Validation.LibraryMemberValidation;
 import Validation.ValidateOutput;
+import businesscontrollers.AppUserType;
 import businessmodels.CheckoutRecordEntry;
 import businessmodels.Inventory;
+import businessmodels.UserType;
 
 public class MainPageController implements Initializable {
 
@@ -120,7 +122,7 @@ public class MainPageController implements Initializable {
     private PasswordField user_password_textbox;
 
     @FXML
-    private ComboBox<User.UserType> user_usertype_textbox;
+    private ComboBox<String> user_usertype_textbox;
 
     @FXML
     private PasswordField user_re_password_textbox;
@@ -144,7 +146,7 @@ public class MainPageController implements Initializable {
     private Button user_delete_button;
 
     private User selectedUser = null;
-
+    private UserType userType = new AppUserType();
     private void setInitialUserState() {
         user_create_button.setDisable(false);
         user_save_button.setDisable(true);
@@ -152,11 +154,7 @@ public class MainPageController implements Initializable {
         user_delete_button.setDisable(true);
         user_cancel_button.setDisable(true);
         user_usertype_textbox.getItems().removeAll(user_usertype_textbox.getItems());
-        user_usertype_textbox.getItems().addAll(
-                User.UserType.ADMIN,
-                User.UserType.LIBRARIAN,
-                User.UserType.BOTH
-        );
+        user_usertype_textbox.getItems().addAll(userType.getTypes());
         setUserForm(false);
         populateUserTable();
         user_userList_list.getSelectionModel().selectedItemProperty().addListener(
