@@ -3,20 +3,20 @@ package models.business.publications;
 import businessmodels.ProductImpl;
 import java.io.Serializable;
 import java.util.List;
-import businessmodels.Author;
+import businessmodels.Owner;
 
 import decorators.ProductDecorator;
 
 public class Book extends ProductDecorator implements Serializable {
 
-    private List<Author> authors;
+    private List<Owner> authors;
 
-    public Book(String isbn, String title, double dailyRate, double dailyFine, int borrowDuration, List<Author> authors) {
+    public Book(String isbn, String title, double dailyRate, double dailyFine, int borrowDuration, List<Owner> authors) {
         super(new ProductImpl(isbn, title, dailyRate, dailyFine, borrowDuration));
         this.authors = authors;
     }
 
-    public List<Author> getAuthors() {
+    public List<Owner> getAuthors() {
         return authors;
     }
 
@@ -24,7 +24,7 @@ public class Book extends ProductDecorator implements Serializable {
         return this.getProductId();
     }
 
-    public void setAuthors(List<Author> authors) {
+    public void setAuthors(List<Owner> authors) {
         this.authors = authors;
     }
 

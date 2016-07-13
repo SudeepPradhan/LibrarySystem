@@ -1,6 +1,5 @@
 package views;
 
-import controllers.AuthorController;
 import controllers.CirculationController;
 import businesscontrollers.CirculationControllerImpl;
 import controllers.PublicationController;
@@ -41,7 +40,7 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
 import businessmodels.Address;
-import businessmodels.Author;
+import businessmodels.Owner;
 import models.business.LibraryMember;
 import businessmodels.User;
 import models.business.publications.Book;
@@ -57,13 +56,14 @@ import businessmodels.Inventory;
 import businessmodels.UserType;
 import decorators.ProductDecorator;
 import interfaces.Customer;
+import controllers.OwnerController;
 
 public class MainPageController implements Initializable {
 
     private UserManagementController userManagementController;
     private CirculationController circulationController;
     private PublicationController publicationController;
-    private AuthorController authorController;
+    private OwnerController authorController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -384,14 +384,14 @@ public class MainPageController implements Initializable {
         }
 
         if (Integer.parseInt(_memberId) <= gettLibraryMemberSize()) {
-            circulationController.updateLibraryMember(
+            circulationController.updateCustomer(
                     _memberId,
                     _memberFirstName,
                     _memberLastName,
                     _memberAddress,
                     _memberPhone);
         } else {
-            circulationController.addLibraryMember(
+            circulationController.addCustomer(
                     _memberId,
                     _memberFirstName,
                     _memberLastName,
@@ -421,7 +421,7 @@ public class MainPageController implements Initializable {
         if (lib_mem_search_textbox.getText().trim().isEmpty()) {
             populateLibraryMemberList();
         } else {
-            Customer libraryMember = circulationController.searchLibraryMember(lib_mem_search_textbox.getText());
+            Customer libraryMember = circulationController.searchCustomer(lib_mem_search_textbox.getText());
             lib_mem_userList_list.getItems().removeAll(lib_mem_userList_list.getItems());
             if (libraryMember == null) {
                 lib_mem_userList_list.getItems().removeAll(lib_mem_userList_list.getItems());
@@ -458,7 +458,7 @@ public class MainPageController implements Initializable {
     }
 
     private void populateLibraryMemberList() {
-        List<LibraryMember> libraryList = (List<LibraryMember>)(List<?>)circulationController.getLibraryMembers();
+        List<LibraryMember> libraryList = (List<LibraryMember>)(List<?>)circulationController.getCustomer();
         lib_mem_userList_list.getItems().removeAll(lib_mem_userList_list.getItems());
         lib_mem_userList_list.getItems().addAll(libraryList);
 
@@ -499,7 +499,7 @@ public class MainPageController implements Initializable {
     }
 
     private int gettLibraryMemberSize() {
-        return circulationController.getLibraryMembers().size();
+        return circulationController.getCustomer().size();
     }
     /*
      * END LIBRARY MEMBER REGION
@@ -556,13 +556,13 @@ public class MainPageController implements Initializable {
     private Button book_edit_button;
 
     @FXML
-    private ListView<Author> book_authorslist_listview;
+    private ListView<Owner> book_authorslist_listview;
 
     @FXML
     private TextField book_numberofcopies_textfield;
 
     @FXML
-    private ComboBox<Author> book_authors_combobox;
+    private ComboBox<Owner> book_authors_combobox;
 
     private boolean createNewBook = false;
 
@@ -573,8 +573,8 @@ public class MainPageController implements Initializable {
 
         publicationController = new PublicationControllerImpl();
         authorController = new AuthorControllerImpl();
-        populateBookList(publicationController.getBooks());
-        populateAuthorsCombobox(authorController.getAuthors());
+        populateBookList(publicationController.getProducts());
+        populateAuthorsCombobox(authorController.getOwners());
 
         new AutoCompleteComboBoxListener(book_authors_combobox);
 
@@ -627,13 +627,13 @@ public class MainPageController implements Initializable {
             book_error_label.setText("Invalid input: number of copies");
             return;
         }
-        List<Author> authors = new ArrayList<>();
+        List<Owner> authors = new ArrayList<>();
         authors.addAll(book_authorslist_listview.getItems());
         String errorMessage = PublicationValidation.validateBook(book_title_textfield.getText(), borrowDuration, book_isbn_textfield.getText(), authors, createNewBook);
         if (errorMessage != null) {
             book_error_label.setText(errorMessage);
         } else if (createNewBook) {
-            ProductDecorator book = publicationController.addBook(book_isbn_textfield.getText(), book_title_textfield.getText(), 0.0, 0.0, borrowDuration, authors);
+            ProductDecorator book = publicationController.addProduct(book_isbn_textfield.getText(), book_title_textfield.getText(), 0.0, 0.0, borrowDuration, authors);
             if (book != null) {
                 publicationController.addCopies(book_isbn_textfield.getText(), numberOfCopies);
                 book_list_listview.getItems().add(book);
@@ -653,7 +653,7 @@ public class MainPageController implements Initializable {
                     book_error_label.setText("Reducing copies not supported");
                     return;
                 }
-                publicationController.updateBook(book_isbn_textfield.getText(), book_title_textfield.getText(), borrowDuration, authors);
+                publicationController.updateProduct(book_isbn_textfield.getText(), book_title_textfield.getText(), borrowDuration, authors);
 
                 book_searchwititle_enter(null);
             }
@@ -682,13 +682,13 @@ public class MainPageController implements Initializable {
 
     @FXML
     void book_searchwititle_enter(ActionEvent event) {
-        ProductDecorator isbnBook = publicationController.searchBookWithIsbn(book_titlesearch_textfield.getText());
+        ProductDecorator isbnBook = publicationController.searchProductWithId(book_titlesearch_textfield.getText());
         List<ProductDecorator> books;
         if (isbnBook != null) {
             books = new ArrayList<ProductDecorator>();
             books.add(isbnBook);
         } else {
-            books = publicationController.searchBooksWithTitle(book_titlesearch_textfield.getText());
+            books = publicationController.searchProductWithTitle(book_titlesearch_textfield.getText());
         }
         book_list_listview.getItems().clear();
         book_list_listview.getItems().addAll(books);
@@ -714,7 +714,7 @@ public class MainPageController implements Initializable {
 
     @FXML
     void book_removeuthor_buttonclick(ActionEvent event) {
-        Author author = book_authorslist_listview.getSelectionModel().getSelectedItem();
+        Owner author = book_authorslist_listview.getSelectionModel().getSelectedItem();
         if (author != null) {
             book_authorslist_listview.getItems().remove(author);
         }
@@ -794,16 +794,16 @@ public class MainPageController implements Initializable {
         book_list_listview.getItems().addAll(books);
     }
 
-    void populateBookAuthorList(List<Author> authors) {
+    void populateBookAuthorList(List<Owner> authors) {
         book_authorslist_listview.getItems().clear();
         book_authorslist_listview.getItems().addAll(authors);
     }
 
-    void addAuthorsToBook(Author author) {
+    void addAuthorsToBook(Owner author) {
         book_authorslist_listview.getItems().add(author);
     }
 
-    void populateAuthorsCombobox(List<Author> authors) {
+    void populateAuthorsCombobox(List<Owner> authors) {
         book_authors_combobox.getItems().clear();
         book_authors_combobox.getItems().addAll(authors);
     }
@@ -841,7 +841,7 @@ public class MainPageController implements Initializable {
     @FXML
     private TextField author_zip_textbox;
     @FXML
-    private ListView<Author> author_authorList_list;
+    private ListView<Owner> author_authorList_list;
     @FXML
     private TextField author_search_textbox;
 
@@ -856,7 +856,7 @@ public class MainPageController implements Initializable {
     //@FXML
     //private Button author_delete_button;
 
-    private Author selectedAuthor = null;
+    private Owner selectedAuthor = null;
 
     private void setInitialAuthorState() {
         author_create_button.setDisable(false);
@@ -866,10 +866,9 @@ public class MainPageController implements Initializable {
         setAuthorForm(false);
         populateAuthorTable();
 
-        author_authorList_list.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<Author>() {
-            public void changed(ObservableValue<? extends Author> ov,
-                    Author old_val, Author new_val) {
+        author_authorList_list.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Owner>() {
+            public void changed(ObservableValue<? extends Owner> ov,
+                    Owner old_val, Owner new_val) {
                 author_list_changed(new_val);
             }
         });
@@ -885,7 +884,7 @@ public class MainPageController implements Initializable {
         String zip = author_zip_textbox.getText();
 
         Address address = new Address(street, city, state, zip);
-        Author author = new Author(
+        Owner author = new Owner(
                                 author_firstname_textbox.getText(), 
                                 author_lastname_textbox.getText(), 
                                 address, 
@@ -926,11 +925,11 @@ public class MainPageController implements Initializable {
         }
 
         if (selectedAuthor == null) {
-            if (authorController.createAuthor(author_firstname_textbox.getText(), author_lastname_textbox.getText(), address, author_phone_textbox.getText(), author_credential_textbox.getText(), author_biography_textbox.getText())) {
+            if (authorController.createOwner(author_firstname_textbox.getText(), author_lastname_textbox.getText(), address, author_phone_textbox.getText(), author_credential_textbox.getText(), author_biography_textbox.getText())) {
                 selectedAuthor = null;
                 saveSuccess = true;
             }
-        } else if (authorController.updateAuthor(selectedAuthor, author_firstname_textbox.getText(), author_lastname_textbox.getText(), address, author_phone_textbox.getText(), author_credential_textbox.getText(), author_biography_textbox.getText())) {
+        } else if (authorController.updateOwner(selectedAuthor, author_firstname_textbox.getText(), author_lastname_textbox.getText(), address, author_phone_textbox.getText(), author_credential_textbox.getText(), author_biography_textbox.getText())) {
             saveSuccess = true;
         }
 
@@ -978,7 +977,7 @@ public class MainPageController implements Initializable {
 
     @FXML
     void author_search_click(ActionEvent event) {
-        List<Author> authors = authorController.searchAuthors(author_search_textbox.getText());
+        List<Owner> authors = authorController.searchOwners(author_search_textbox.getText());
         author_authorList_list.getItems().removeAll(author_authorList_list.getItems());
         author_authorList_list.getItems().addAll(authors);
     }
@@ -998,12 +997,12 @@ public class MainPageController implements Initializable {
     }
 
     private void populateAuthorTable() {
-        List<Author> authors = authorController.getAuthors();
+        List<Owner> authors = authorController.getOwners();
         author_authorList_list.getItems().removeAll(author_authorList_list.getItems());
         author_authorList_list.getItems().addAll(authors);
     }
 
-    private void author_list_changed(Author selecttion) {
+    private void author_list_changed(Owner selecttion) {
         selectedAuthor = selecttion;
         author_edit_button.setDisable(false);
 
@@ -1015,7 +1014,7 @@ public class MainPageController implements Initializable {
         loadObjectToControls(selectedAuthor);
     }
 
-    private void loadObjectToControls(Author author) {
+    private void loadObjectToControls(Owner author) {
         if (author != null) {
             author_firstname_textbox.setText(author.getFirstName());
             author_lastname_textbox.setText(author.getLastName());
@@ -1163,7 +1162,7 @@ public class MainPageController implements Initializable {
 
     @FXML
     void cir_search_buttonclick(ActionEvent event) {
-        selectedCirculationMember = (LibraryMember) circulationController.searchLibraryMember(cir_search_member_textbox.getText());
+        selectedCirculationMember = (LibraryMember) circulationController.searchCustomer(cir_search_member_textbox.getText());
         if (selectedCirculationMember == null) {
             cir_error_label.setText("Member not found");
             cir_memId_label.setText("");
@@ -1190,8 +1189,8 @@ public class MainPageController implements Initializable {
 
     @FXML
     void cir_booksearch_button_click(ActionEvent event) {
-        ProductDecorator isbnBook = publicationController.searchBookWithIsbn(cir_booksearch_textbox.getText());
-        List<ProductDecorator> searchResults = publicationController.searchBooksWithTitle(cir_booksearch_textbox.getText());
+        ProductDecorator isbnBook = publicationController.searchProductWithId(cir_booksearch_textbox.getText());
+        List<ProductDecorator> searchResults = publicationController.searchProductWithTitle(cir_booksearch_textbox.getText());
         if (isbnBook != null) {
             searchResults.add(0, isbnBook);
         }

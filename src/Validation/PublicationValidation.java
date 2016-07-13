@@ -4,7 +4,7 @@ import interfaces.Validator;
 import interfaces.ValidateOutput;
 import java.util.List;
 import businessmodels.Address;
-import businessmodels.Author;
+import businessmodels.Owner;
 import models.business.publications.Book;
 
 import interfaces.Product;
@@ -49,11 +49,11 @@ public class PublicationValidation implements Validator<LibraryMember>{
         return true;
     }
 
-    public static boolean isValidBook(String title, int borrowDuration, String isbn, List<Author> authors, boolean isNewBook) {
+    public static boolean isValidBook(String title, int borrowDuration, String isbn, List<Owner> authors, boolean isNewBook) {
         return validateBook(title, borrowDuration, isbn, authors, isNewBook) == null;
     }
 
-    public static String validateBook(String title, int borrowDuration, String isbn, List<Author> authors, boolean isNewBook) {
+    public static String validateBook(String title, int borrowDuration, String isbn, List<Owner> authors, boolean isNewBook) {
         if (!validateTitle(title)) {
             return "Title should be atleast " + MIN_BOOK_TITLE_LENGTH + " charcter/s long";
         }
@@ -71,7 +71,7 @@ public class PublicationValidation implements Validator<LibraryMember>{
         if (authors == null || authors.size() == 0) {
             return "Book should have atleast one author";
         }
-        for (Author author : authors) {
+        for (Owner author : authors) {
             if (author == null) {
                 return "Invalid author";
             } 

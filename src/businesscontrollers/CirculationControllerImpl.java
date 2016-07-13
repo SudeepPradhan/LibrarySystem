@@ -19,12 +19,12 @@ public class CirculationControllerImpl implements CirculationController {
     private DataManager dataManager = DatabaseFacade.getDataManager();
 
     @Override
-    public CustomerDecorator searchLibraryMember(String memberId) {
+    public CustomerDecorator searchCustomer(String memberId) {
         return dataManager.getLibraryMember(memberId);
     }
 
     @Override
-    public List<CustomerDecorator> getLibraryMembers() {
+    public List<CustomerDecorator> getCustomer() {
         return dataManager.getLibraryMembers();
     }
 
@@ -32,7 +32,7 @@ public class CirculationControllerImpl implements CirculationController {
     public boolean checkout(String memberId, Inventory inventory) {
         int borrowDuration = inventory.getProduct().getBorrowDuration();
         LocalDate checkoutDate = LocalDate.now();
-        CustomerDecorator libraryMember = searchLibraryMember(memberId);
+        CustomerDecorator libraryMember = searchCustomer(memberId);
         if (libraryMember == null) {
             return false;
         }
@@ -48,7 +48,7 @@ public class CirculationControllerImpl implements CirculationController {
     @Override
     public boolean checkin(String memberId, CheckoutRecordEntry checkoutRecordEntry) {
         LocalDate checkinDate = LocalDate.now();
-        CustomerDecorator libraryMember = searchLibraryMember(memberId);
+        CustomerDecorator libraryMember = searchCustomer(memberId);
         if (libraryMember == null) {
             return false;
         }
@@ -61,7 +61,7 @@ public class CirculationControllerImpl implements CirculationController {
     }
 
     @Override
-    public boolean addLibraryMember(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
+    public boolean addCustomer(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
         CustomerDecorator libraryMember = new LibraryMember(memberId, firstName, lastName, address, phoneNumber);
         if (libraryMember.validate(new LibraryMemberValidation()).isValid()) {
             return dataManager.saveLibraryMember(libraryMember);
@@ -70,8 +70,8 @@ public class CirculationControllerImpl implements CirculationController {
     }
 
     @Override
-    public boolean updateLibraryMember(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
-        CustomerDecorator libraryMember = searchLibraryMember(memberId);
+    public boolean updateCustomer(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
+        CustomerDecorator libraryMember = searchCustomer(memberId);
         if (libraryMember == null) {
             return false;
         }

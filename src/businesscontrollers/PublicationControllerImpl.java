@@ -5,7 +5,7 @@ import database.DataManager;
 import database.DatabaseFacade;
 import java.util.ArrayList;
 import java.util.List;
-import businessmodels.Author;
+import businessmodels.Owner;
 import models.business.publications.Book;
 import Validation.PublicationValidation;
 import decorators.ProductDecorator;
@@ -18,7 +18,7 @@ public class PublicationControllerImpl implements PublicationController {
     private DataManager dataManager = DatabaseFacade.getDataManager();
 
     @Override
-    public Book searchBookWithIsbn(String isbn) {
+    public Book searchProductWithId(String isbn) {
         List<Product> products = dataManager.getProducts();
         for (Product product : products) {
             if (product instanceof Book) {
@@ -31,7 +31,7 @@ public class PublicationControllerImpl implements PublicationController {
     }
 
     @Override
-    public List<ProductDecorator> searchBooksWithTitle(String title) {
+    public List<ProductDecorator> searchProductWithTitle(String title) {
         List<Product> products = dataManager.getProducts();
         List<ProductDecorator> books = new ArrayList<ProductDecorator>();
         for (Product product : products) {
@@ -45,7 +45,7 @@ public class PublicationControllerImpl implements PublicationController {
     }
 
     @Override
-    public Book addBook(String isbn, String title, double dailyRate, double dailyFine, int borrowDuration, List<Author> authors) {
+    public Book addProduct(String isbn, String title, double dailyRate, double dailyFine, int borrowDuration, List<Owner> authors) {
         Book book = new Book(isbn, title, dailyRate, dailyFine, borrowDuration, authors);
         if (PublicationValidation.isValidBook(title, borrowDuration, isbn, authors, true)) {
             dataManager.saveProduct(book);
@@ -57,7 +57,7 @@ public class PublicationControllerImpl implements PublicationController {
     }
 
     @Override
-    public List<ProductDecorator> getBooks() {
+    public List<ProductDecorator> getProducts() {
         List<Product> products = dataManager.getProducts();
         List<ProductDecorator> books = new ArrayList<ProductDecorator>();
         for (Product product : products) {
@@ -70,7 +70,7 @@ public class PublicationControllerImpl implements PublicationController {
 
     @Override
     public boolean addCopies(String isbn, int numberOfCopies) {
-        Book book = searchBookWithIsbn(isbn);
+        Book book = searchProductWithId(isbn);
         if (book == null) {
             return false;
         }
@@ -82,8 +82,8 @@ public class PublicationControllerImpl implements PublicationController {
     }
 
     @Override
-    public boolean updateBook(String isbn, String title, int borrowDuration, List<Author> authors) {
-        Book book = searchBookWithIsbn(isbn);
+    public boolean updateProduct(String isbn, String title, int borrowDuration, List<Owner> authors) {
+        Book book = searchProductWithId(isbn);
         if (book == null) {
             return false;
         }

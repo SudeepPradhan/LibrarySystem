@@ -1,7 +1,7 @@
 package database;
 
 import java.util.List;
-import businessmodels.Author;
+import businessmodels.Owner;
 import interfaces.Product;
 import businessmodels.User;
 import decorators.CustomerDecorator;
@@ -42,12 +42,12 @@ public class DatabaseIO {
         return libraryMembers;
     }
 
-    protected static boolean saveAuthors(List<Author> authors) {
+    protected static boolean saveAuthors(List<Owner> authors) {
         return IOTool.writeObject(authors, AUTHORS_PATH);
     }
 
-    protected static List<Author> loadAuthors() {
-        List<Author> libraryMembers = (List<Author>) IOTool.readObject(AUTHORS_PATH);
+    protected static List<Owner> loadAuthors() {
+        List<Owner> libraryMembers = (List<Owner>) IOTool.readObject(AUTHORS_PATH);
         return libraryMembers;
     }
 }

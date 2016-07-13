@@ -2,7 +2,7 @@ package database;
 
 import java.util.ArrayList;
 import java.util.List;
-import businessmodels.Author;
+import businessmodels.Owner;
 import models.business.LibraryMember;
 //import models.business.User;
 
@@ -16,7 +16,7 @@ public class DatabaseFacade implements DataManager {
 
     private List<User> users;
     private List<CustomerDecorator> libraryMembers;
-    private List<Author> authors;
+    private List<Owner> authors;
     
     private List<Product> products;
 
@@ -31,7 +31,7 @@ public class DatabaseFacade implements DataManager {
         users = users == null ? new ArrayList<User>() : users;
         products = products == null ? new ArrayList<Product>() : products;
         libraryMembers = libraryMembers == null ? new ArrayList<CustomerDecorator>() : libraryMembers;
-        authors = authors == null ? new ArrayList<Author>() : authors;
+        authors = authors == null ? new ArrayList<Owner>() : authors;
     }
 
     public static DataManager getDataManager() {
@@ -67,7 +67,7 @@ public class DatabaseFacade implements DataManager {
     }
 
     @Override
-    public boolean saveAuthor(Author author) {
+    public boolean saveAuthor(Owner author) {
         if (!authors.contains(author)) {
             authors.add(author);
         }
@@ -120,7 +120,7 @@ public class DatabaseFacade implements DataManager {
     }
 
     @Override
-    public List<Author> getAuthors() {
+    public List<Owner> getAuthors() {
         return authors;
     }
 

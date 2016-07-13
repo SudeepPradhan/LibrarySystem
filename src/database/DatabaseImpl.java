@@ -5,7 +5,7 @@ import interfaces.Customer;
 import interfaces.Product;
 import java.util.ArrayList;
 import java.util.List;
-import businessmodels.Author;
+import businessmodels.Owner;
 import decorators.CustomerDecorator;
 import models.business.LibraryMember;
 
@@ -13,7 +13,7 @@ public class DatabaseImpl implements Database {
 
     private List<User> users;
     private List<CustomerDecorator> libraryMembers;
-    private List<Author> authors;
+    private List<Owner> authors;
 
     private List<Product> products;
 
@@ -26,7 +26,7 @@ public class DatabaseImpl implements Database {
         users = users == null ? new ArrayList<User>() : users;
         products = products == null ? new ArrayList<Product>() : products;
         libraryMembers = libraryMembers == null ? new ArrayList<CustomerDecorator>() : libraryMembers;
-        authors = authors == null ? new ArrayList<Author>() : authors;
+        authors = authors == null ? new ArrayList<Owner>() : authors;
     }
 
     @Override

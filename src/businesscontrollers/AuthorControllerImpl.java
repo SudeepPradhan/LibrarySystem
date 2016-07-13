@@ -1,21 +1,21 @@
 package businesscontrollers;
 
-import controllers.AuthorController;
 import database.DataManager;
 import database.DatabaseFacade;
 import java.util.ArrayList;
 import java.util.List;
 import businessmodels.Address;
-import businessmodels.Author;
+import businessmodels.Owner;
 import Validation.AuthorValidation;
+import controllers.OwnerController;
 
-public class AuthorControllerImpl implements AuthorController {
+public class AuthorControllerImpl implements OwnerController {
 
     private DataManager dataManager = DatabaseFacade.getDataManager();
 
     @Override
-    public boolean createAuthor(String firstName, String lastName, Address address, String phoneNumber, String credentials, String biography) {
-        Author author = new Author(firstName, lastName, address, phoneNumber, credentials, biography);
+    public boolean createOwner(String firstName, String lastName, Address address, String phoneNumber, String credentials, String biography) {
+        Owner author = new Owner(firstName, lastName, address, phoneNumber, credentials, biography);
         if (author.validate(new AuthorValidation()).isValid()) {
             return dataManager.saveAuthor(author);
         }
@@ -23,7 +23,7 @@ public class AuthorControllerImpl implements AuthorController {
     }
 
     @Override
-    public boolean updateAuthor(Author author, String firstName, String lastName, Address address, String phoneNumber, String credentials, String biography) {
+    public boolean updateOwner(Owner author, String firstName, String lastName, Address address, String phoneNumber, String credentials, String biography) {
         if (author == null) {
             return false;
         }
@@ -40,11 +40,11 @@ public class AuthorControllerImpl implements AuthorController {
     }
 
     @Override
-    public List<Author> searchAuthors(String name) {
-        List<Author> authors = dataManager.getAuthors();
-        List<Author> searchResult = new ArrayList<Author>();
+    public List<Owner> searchOwners(String name) {
+        List<Owner> authors = dataManager.getAuthors();
+        List<Owner> searchResult = new ArrayList<Owner>();
 
-        for (Author author : authors) {
+        for (Owner author : authors) {
             if (author.getLastName().toLowerCase().contains(name.toLowerCase())
                     || author.getFirstName().toLowerCase().contains(name.toLowerCase())) {
                 searchResult.add(author);
@@ -55,7 +55,7 @@ public class AuthorControllerImpl implements AuthorController {
     }
 
     @Override
-    public List<Author> getAuthors() {
+    public List<Owner> getOwners() {
         return dataManager.getAuthors();
     }
 

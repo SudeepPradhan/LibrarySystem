@@ -1,7 +1,7 @@
 package database;
 
 import java.util.List;
-import businessmodels.Author;
+import businessmodels.Owner;
 import models.business.LibraryMember;
 //import models.business.User;
 
@@ -19,7 +19,7 @@ public interface DataManager {
 
     public boolean saveLibraryMember(CustomerDecorator libraryMember);
 
-    public boolean saveAuthor(Author author);
+    public boolean saveAuthor(Owner author);
 
     public User getUser(String username);
 
@@ -31,7 +31,7 @@ public interface DataManager {
 
     public CustomerDecorator getLibraryMember(String memberId);
 
-    public List<Author> getAuthors();
+    public List<Owner> getAuthors();
 
     public boolean deleteUser(String username);
 

@@ -3,9 +3,9 @@ package Validation;
 import interfaces.Validator;
 import interfaces.ValidateOutput;
 import businessmodels.Address;
-import businessmodels.Author;
+import businessmodels.Owner;
 
-public class AuthorValidation implements Validator<Author> {
+public class AuthorValidation implements Validator<Owner> {
 
     private static final int MIN_PHONE_LENGTH = 10;
 
@@ -62,7 +62,7 @@ public class AuthorValidation implements Validator<Author> {
     }
 
     @Override
-    public ValidateOutput isValid(Author author) {
+    public ValidateOutput isValid(Owner author) {
         if (author == null) {
             return new ValidateOutputImpl(false, "");
         }
