@@ -1,8 +1,5 @@
 package models.business;
 
-import interfaces.Validatable;
-import interfaces.ValidateOutput;
-import interfaces.Validator;
 import java.io.Serializable;
 import java.time.LocalDate;
 import businessmodels.Address;
@@ -13,7 +10,7 @@ import businessmodels.Inventory;
 import decorators.CustomerDecorator;
 import utilities.LogOutput;
 
-public class LibraryMember extends CustomerDecorator implements Validatable<CustomerDecorator>, Serializable {
+public class LibraryMember extends CustomerDecorator implements Serializable {
 
     public LibraryMember(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
         super(new CustomerImpl(memberId));
@@ -43,10 +40,5 @@ public class LibraryMember extends CustomerDecorator implements Validatable<Cust
     @Override
     public String toString() {
         return this.getCustomerId();
-    }
-
-    @Override
-    public ValidateOutput validate(Validator<CustomerDecorator> validator) {
-        return validator.isValid(this);
     }
 }
