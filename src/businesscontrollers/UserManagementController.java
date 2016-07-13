@@ -32,7 +32,7 @@ public interface UserManagementController {
      * @param userType the {@link Usesr#UserType}.
      * @return true if the user is created, false otherwise.
      */
-    public boolean createUser(String username, String password, User.UserType userType);
+    public boolean createUser(String username, String password, String userType);
 
     /**
      *
@@ -41,7 +41,7 @@ public interface UserManagementController {
      * @param userType the {@link Usesr#UserType}.
      * @return true if the user type is updated, false otherwise.
      */
-    public boolean updateUser(String username, String password, User.UserType userType);
+    public boolean updateUser(String username, String password, String userType);
 
     /**
      * Deletes a user.
