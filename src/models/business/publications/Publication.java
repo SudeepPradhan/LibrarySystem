@@ -41,18 +41,22 @@ public abstract class Publication extends ProductDecorator implements Serializab
         }
     }
 
+    @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
+    @Override
     public void setBorrowDuration(int borrowDuration) {
         this.borrowDuration = borrowDuration;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public int getBorrowDuration() {
         return borrowDuration;
     }

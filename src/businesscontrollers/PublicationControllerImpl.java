@@ -11,6 +11,7 @@ import Validation.PublicationValidation;
 import decorators.ProductDecorator;
 
 import interfaces.Product;
+import models.base.UserNotification;
 
 public class PublicationControllerImpl implements PublicationController {
 
@@ -48,6 +49,8 @@ public class PublicationControllerImpl implements PublicationController {
         Book book = new Book(isbn, title, dailyRate, dailyFine, borrowDuration, authors);
         if (PublicationValidation.isValidBook(title, borrowDuration, isbn, authors, true)) {
             dataManager.saveProduct(book);
+            UserNotification notifyuser = new UserNotification();
+            notifyuser.newBookAvailableNotification();
             return book;
         }
         return null;
