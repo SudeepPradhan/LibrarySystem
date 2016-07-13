@@ -1,5 +1,6 @@
 package businesscontrollers;
 
+import controllers.PublicationController;
 import database.DataManager;
 import database.DatabaseFacade;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.List;
 import businessmodels.Author;
 import models.business.publications.Book;
 import Validation.PublicationValidation;
+import decorators.ProductDecorator;
 
 import interfaces.Product;
 
@@ -28,9 +30,9 @@ public class PublicationControllerImpl implements PublicationController {
     }
 
     @Override
-    public List<Book> searchBooksWithTitle(String title) {
+    public List<ProductDecorator> searchBooksWithTitle(String title) {
         List<Product> products = dataManager.getProducts();
-        List<Book> books = new ArrayList<Book>();
+        List<ProductDecorator> books = new ArrayList<ProductDecorator>();
         for (Product product : products) {
             if (product instanceof Book) {
                 if (((Book) product).getTitle().toLowerCase().contains(title.toLowerCase())) {
@@ -52,9 +54,9 @@ public class PublicationControllerImpl implements PublicationController {
     }
 
     @Override
-    public List<Book> getBooks() {
+    public List<ProductDecorator> getBooks() {
         List<Product> products = dataManager.getProducts();
-        List<Book> books = new ArrayList<Book>();
+        List<ProductDecorator> books = new ArrayList<ProductDecorator>();
         for (Product product : products) {
             if (product instanceof Book) {
                 books.add((Book) product);

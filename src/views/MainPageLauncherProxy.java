@@ -1,6 +1,6 @@
 package views;
 
-import businesscontrollers.UserManagementController;
+import controllers.UserManagementController;
 import businesscontrollers.UserManagementControllerImpl;
 import businessmodels.User;
 

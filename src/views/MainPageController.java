@@ -1,12 +1,12 @@
 package views;
 
 import controllers.AuthorController;
-import interfaces.CirculationController;
+import controllers.CirculationController;
 import businesscontrollers.CirculationControllerImpl;
-import businesscontrollers.PublicationController;
+import controllers.PublicationController;
 import businesscontrollers.AuthorControllerImpl;
 import businesscontrollers.PublicationControllerImpl;
-import businesscontrollers.UserManagementController;
+import controllers.UserManagementController;
 import businesscontrollers.UserManagementControllerImpl;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
@@ -55,6 +55,7 @@ import businesscontrollers.AppUserType;
 import businessmodels.CheckoutRecordEntry;
 import businessmodels.Inventory;
 import businessmodels.UserType;
+import decorators.ProductDecorator;
 import interfaces.Customer;
 
 public class MainPageController implements Initializable {
@@ -522,7 +523,7 @@ public class MainPageController implements Initializable {
     private TextField book_titlesearch_textfield;
 
     @FXML
-    private ListView<Book> book_list_listview;
+    private ListView<ProductDecorator> book_list_listview;
 
     @FXML
     private TextField book_title_textfield;
@@ -584,10 +585,10 @@ public class MainPageController implements Initializable {
         book_authors_combobox.setEditable(false);
 
         book_list_listview.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<Book>() {
+                new ChangeListener<ProductDecorator>() {
 
             @Override
-            public void changed(ObservableValue<? extends Book> observable, Book oldValue, Book newValue) {
+            public void changed(ObservableValue<? extends ProductDecorator> observable, ProductDecorator oldValue, ProductDecorator newValue) {
                 if (newValue != null) {
                     showBookDetails(newValue);
                 }
@@ -595,19 +596,19 @@ public class MainPageController implements Initializable {
         });
     }
 
-    private void showBookDetails(Book book) {
+    private void showBookDetails(ProductDecorator book) {
         resetBookFieldsAndControlls();
 
         book_edit_button.setDisable(false);
 
         book_isbn_textfield.setEditable(false);
-        book_isbn_textfield.setText(book.getIsbn());
+        book_isbn_textfield.setText(book.getProductId());
         book_title_textfield.setText(book.getTitle());
         book_numberofcopies_textfield.setText(String.valueOf(book.getNumberOfAvailableInventory()));
         book_loanperiod_textfield.setText(String.valueOf(book.getBorrowDuration()));
 
         book_authorslist_listview.getItems().clear();
-        book_authorslist_listview.getItems().addAll(book.getAuthors());
+        book_authorslist_listview.getItems().addAll(((Book)book).getAuthors());
     }
 
     @FXML
@@ -632,7 +633,7 @@ public class MainPageController implements Initializable {
         if (errorMessage != null) {
             book_error_label.setText(errorMessage);
         } else if (createNewBook) {
-            Book book = publicationController.addBook(book_isbn_textfield.getText(), book_title_textfield.getText(), 0.0, 0.0, borrowDuration, authors);
+            ProductDecorator book = publicationController.addBook(book_isbn_textfield.getText(), book_title_textfield.getText(), 0.0, 0.0, borrowDuration, authors);
             if (book != null) {
                 publicationController.addCopies(book_isbn_textfield.getText(), numberOfCopies);
                 book_list_listview.getItems().add(book);
@@ -644,7 +645,7 @@ public class MainPageController implements Initializable {
         } else {
             int index = book_list_listview.getSelectionModel().getSelectedIndex();
             if (index > -1) {
-                Book book = book_list_listview.getSelectionModel().getSelectedItem();
+                ProductDecorator book = book_list_listview.getSelectionModel().getSelectedItem();
                 int currentNumberOfCopies = (int) book.getNumberOfAvailableInventory();
                 if (numberOfCopies > currentNumberOfCopies) {
                     publicationController.addCopies(book_isbn_textfield.getText(), numberOfCopies - currentNumberOfCopies);
@@ -681,10 +682,10 @@ public class MainPageController implements Initializable {
 
     @FXML
     void book_searchwititle_enter(ActionEvent event) {
-        Book isbnBook = publicationController.searchBookWithIsbn(book_titlesearch_textfield.getText());
-        List<Book> books;
+        ProductDecorator isbnBook = publicationController.searchBookWithIsbn(book_titlesearch_textfield.getText());
+        List<ProductDecorator> books;
         if (isbnBook != null) {
-            books = new ArrayList<Book>();
+            books = new ArrayList<ProductDecorator>();
             books.add(isbnBook);
         } else {
             books = publicationController.searchBooksWithTitle(book_titlesearch_textfield.getText());
@@ -788,7 +789,7 @@ public class MainPageController implements Initializable {
         book_authors_combobox.setEditable(true);
     }
 
-    void populateBookList(List<Book> books) {
+    void populateBookList(List<ProductDecorator> books) {
         book_list_listview.getItems().clear();
         book_list_listview.getItems().addAll(books);
     }
@@ -1054,7 +1055,7 @@ public class MainPageController implements Initializable {
     @FXML
     private TableView<CheckoutRecordEntry> cir_checkout_record_table;
     @FXML
-    private TableView<Book> cir_booksearch_list;
+    private TableView<ProductDecorator> cir_booksearch_list;
 
     @FXML
     private TextField cir_search_member_textbox;
@@ -1189,8 +1190,8 @@ public class MainPageController implements Initializable {
 
     @FXML
     void cir_booksearch_button_click(ActionEvent event) {
-        Book isbnBook = publicationController.searchBookWithIsbn(cir_booksearch_textbox.getText());
-        List<Book> searchResults = publicationController.searchBooksWithTitle(cir_booksearch_textbox.getText());
+        ProductDecorator isbnBook = publicationController.searchBookWithIsbn(cir_booksearch_textbox.getText());
+        List<ProductDecorator> searchResults = publicationController.searchBooksWithTitle(cir_booksearch_textbox.getText());
         if (isbnBook != null) {
             searchResults.add(0, isbnBook);
         }

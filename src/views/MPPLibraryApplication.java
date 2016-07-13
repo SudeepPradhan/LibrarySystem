@@ -1,7 +1,7 @@
 package views;
 
 import businesscontrollers.AppUserType;
-import businesscontrollers.UserManagementController;
+import controllers.UserManagementController;
 import businesscontrollers.UserManagementControllerImpl;
 import java.io.IOException;
 import java.util.List;
