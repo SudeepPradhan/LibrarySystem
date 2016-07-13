@@ -1,5 +1,6 @@
 package views;
 
+import businesscontrollers.AppUserType;
 import businesscontrollers.UserManagementController;
 import businesscontrollers.UserManagementControllerImpl;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import businessmodels.User;
+import businessmodels.UserType;
 import exceptions.ExceptionHandler;
 
 public class MPPLibraryApplication extends Application {
@@ -82,14 +84,14 @@ public class MPPLibraryApplication extends Application {
 
         ObservableList<Tab> tabList = getTabList();
         tabList.removeAll(tabList);
-        if (loginUser.getUserType() == User.UserType.LIBRARIAN) {
+        if (loginUser.getUserType().equalsIgnoreCase("LIBRARIAN")) {
             tabList.add(circulationTab);
         } else {
             tabList.add(userTab);
             tabList.add(libMemberTab);
             tabList.add(bookTab);
             tabList.add(authorTab);
-            if (loginUser.getUserType() == User.UserType.BOTH) {
+            if (loginUser.getUserType().equalsIgnoreCase("BOTH")) {
                 tabList.add(circulationTab);
             }
         }
@@ -110,12 +112,12 @@ public class MPPLibraryApplication extends Application {
         List<User> users = controller.getUsers();
         boolean hasAdminUser = false;
         for (User user : users) {
-            if (user.getUserType() != User.UserType.LIBRARIAN) {
+            if (!user.getUserType().equalsIgnoreCase("LIBRARIAN")) {
                 hasAdminUser = true;
             }
         }
         if (!hasAdminUser) {
-            controller.createUser("superuser", "superuser", User.UserType.BOTH);
+            controller.createUser("superuser", "superuser", "BOTH");
         }
     }
 }
