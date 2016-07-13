@@ -3,14 +3,18 @@ package businesscontrollers;
 import database.DataManager;
 import database.DatabaseFacade;
 import java.util.List;
-//import models.business.User;
-import utilities.CryptoHelper;
 import Validation.UserValidation;
 import views.MPPLibraryApplication;
 import businessmodels.User;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import security.hash.PasswordHasher;
+import security.hash.SHA1Hasher;
 
 public class UserManagementControllerImpl implements UserManagementController {
 
+    PasswordHasher passwordhasher = new PasswordHasher(new SHA1Hasher());
     private DataManager dataManager = DatabaseFacade.getDataManager();
 
     public static User loginUser = null;
@@ -19,8 +23,12 @@ public class UserManagementControllerImpl implements UserManagementController {
     public User authenticate(String username, String password) {
         User user = dataManager.getUser(username);
         if (user != null) {
-            if (user.getPassword().equals(CryptoHelper.getSha1Hash(password))) {
-                return user;
+            try {
+                if (user.getPassword().equals(passwordhasher.encrypt(password))) {
+                    return user;
+                }
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(UserManagementControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
@@ -30,7 +38,11 @@ public class UserManagementControllerImpl implements UserManagementController {
     public boolean createUser(String username, String password, String userType) {
         User user = new User(username, password, userType);
         if (UserValidation.isValid(user)) {
-            user.setPassword(CryptoHelper.getSha1Hash(password));
+            try {
+                user.setPassword(passwordhasher.encrypt(password));
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(UserManagementControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
             return dataManager.saveUser(user);
         }
         return false;
@@ -50,11 +62,15 @@ public class UserManagementControllerImpl implements UserManagementController {
         if (user == null) {
             return false;
         }
-        user.setPassword(CryptoHelper.getSha1Hash(password));
+        try {
+            user.setPassword(passwordhasher.encrypt(password));
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserManagementControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         user.setUserType(userType);
         return dataManager.saveUser(user);
     }
- 
+
     @Override
     public List<User> getUsers() {
         return dataManager.getUsers();
