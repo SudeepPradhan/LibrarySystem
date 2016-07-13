@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class IOTool {
+
     static boolean writeObject(Object object, String relativePath) {
         try {
             FileOutputStream fileOut = new FileOutputStream(relativePath);

@@ -23,7 +23,6 @@ public class DatabaseIO {
         return users;
     }
 
-    //sudeep
     protected static boolean saveProducts(List<Product> products) {
         return IOTool.writeObject(products, PUBLICATIONS_PATH);
     }

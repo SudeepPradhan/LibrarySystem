@@ -96,4 +96,4 @@ public class DatabaseImpl implements Database {
         return users;
     }
 
-} // end of class DatabaseImpl
+}
