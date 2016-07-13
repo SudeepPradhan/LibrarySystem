@@ -1,7 +1,5 @@
 package views;
 
-import businesscontrollers.UserManagementController;
-import businesscontrollers.UserManagementControllerImpl;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -12,13 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-//import models.business.User;
 import utilities.ImageUtil;
-import businessmodels.User;
 
 public class LoginPageController implements Initializable {
 
-    UserManagementController userManagementController;
+    MainPageLauncherProxy mainPageLauncherProxy;
 
     @FXML
     private PasswordField password_textbox;
@@ -36,23 +32,24 @@ public class LoginPageController implements Initializable {
     void loginButtonClicked(ActionEvent event) {
         String username = username_textbox.getText();
         String password = password_textbox.getText();
-        User loginUser = userManagementController.authenticate(username, password);
-        if (loginUser == null) {
+        
+        mainPageLauncherProxy.setUserAccessInfo(username, password);
+        if(!mainPageLauncherProxy.isUserAuthenticated()){
             error_label.setText("Invalid login credentials");
             password_textbox.setText("");
-        } else {
+        }else{
             error_label.setText("");
             username_textbox.setText("");
             password_textbox.setText("");
-            UserManagementControllerImpl.loginUser = loginUser;
-            MPPLibraryApplication.showMainPane();
-        }
+        }        
+        mainPageLauncherProxy.launch();  
+
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         error_label.setText("");
-        userManagementController = new UserManagementControllerImpl();
+        mainPageLauncherProxy = new MainPageLauncherProxy();
         login_imageview_banner.setImage(ImageUtil.getBanner());
         Platform.runLater(new Runnable() {
             @Override
