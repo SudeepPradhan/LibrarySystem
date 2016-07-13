@@ -1,7 +1,7 @@
 package views;
 
-import businesscontrollers.AuthorController;
-import businesscontrollers.CirculationController;
+import controllers.AuthorController;
+import interfaces.CirculationController;
 import businesscontrollers.CirculationControllerImpl;
 import businesscontrollers.PublicationController;
 import businesscontrollers.AuthorControllerImpl;
@@ -40,8 +40,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
-import models.base.Address;
-import models.base.Author;
+import businessmodels.Address;
+import businessmodels.Author;
 import models.business.LibraryMember;
 import businessmodels.User;
 import models.business.publications.Book;
@@ -50,11 +50,12 @@ import Validation.UserValidation;
 import Validation.AuthorValidation;
 import utilities.AutoCompleteComboBoxListener;
 import Validation.LibraryMemberValidation;
-import Validation.ValidateOutput;
+import interfaces.ValidateOutput;
 import businesscontrollers.AppUserType;
 import businessmodels.CheckoutRecordEntry;
 import businessmodels.Inventory;
 import businessmodels.UserType;
+import interfaces.Customer;
 
 public class MainPageController implements Initializable {
 
@@ -419,14 +420,14 @@ public class MainPageController implements Initializable {
         if (lib_mem_search_textbox.getText().trim().isEmpty()) {
             populateLibraryMemberList();
         } else {
-            LibraryMember libraryMember = circulationController.searchLibraryMember(lib_mem_search_textbox.getText());
+            Customer libraryMember = circulationController.searchLibraryMember(lib_mem_search_textbox.getText());
             lib_mem_userList_list.getItems().removeAll(lib_mem_userList_list.getItems());
             if (libraryMember == null) {
                 lib_mem_userList_list.getItems().removeAll(lib_mem_userList_list.getItems());
                 clearLibraryMemberForm();
                 libMemberButtonsEnableDisable(false, true, true, true);
             } else {
-                lib_mem_userList_list.getItems().add(libraryMember);
+                lib_mem_userList_list.getItems().add((LibraryMember)libraryMember);
             }
         }
 
@@ -456,7 +457,7 @@ public class MainPageController implements Initializable {
     }
 
     private void populateLibraryMemberList() {
-        List<LibraryMember> libraryList = circulationController.getLibraryMembers();
+        List<LibraryMember> libraryList = (List<LibraryMember>)(List<?>)circulationController.getLibraryMembers();
         lib_mem_userList_list.getItems().removeAll(lib_mem_userList_list.getItems());
         lib_mem_userList_list.getItems().addAll(libraryList);
 
@@ -1161,7 +1162,7 @@ public class MainPageController implements Initializable {
 
     @FXML
     void cir_search_buttonclick(ActionEvent event) {
-        selectedCirculationMember = circulationController.searchLibraryMember(cir_search_member_textbox.getText());
+        selectedCirculationMember = (LibraryMember) circulationController.searchLibraryMember(cir_search_member_textbox.getText());
         if (selectedCirculationMember == null) {
             cir_error_label.setText("Member not found");
             cir_memId_label.setText("");

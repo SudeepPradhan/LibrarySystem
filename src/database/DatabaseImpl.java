@@ -5,13 +5,14 @@ import interfaces.Customer;
 import interfaces.Product;
 import java.util.ArrayList;
 import java.util.List;
-import models.base.Author;
+import businessmodels.Author;
+import decorators.CustomerDecorator;
 import models.business.LibraryMember;
 
 public class DatabaseImpl implements Database {
 
     private List<User> users;
-    private List<LibraryMember> libraryMembers;
+    private List<CustomerDecorator> libraryMembers;
     private List<Author> authors;
 
     private List<Product> products;
@@ -24,7 +25,7 @@ public class DatabaseImpl implements Database {
 
         users = users == null ? new ArrayList<User>() : users;
         products = products == null ? new ArrayList<Product>() : products;
-        libraryMembers = libraryMembers == null ? new ArrayList<LibraryMember>() : libraryMembers;
+        libraryMembers = libraryMembers == null ? new ArrayList<CustomerDecorator>() : libraryMembers;
         authors = authors == null ? new ArrayList<Author>() : authors;
     }
 

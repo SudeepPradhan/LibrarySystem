@@ -1,9 +1,13 @@
 package Validation;
 
-import models.base.Address;
+import interfaces.Validator;
+import interfaces.ValidateOutput;
+import businessmodels.Address;
+import decorators.CustomerDecorator;
+import interfaces.Customer;
 import models.business.LibraryMember;
 
-public class LibraryMemberValidation implements Validator<LibraryMember> {
+public class LibraryMemberValidation implements Validator<CustomerDecorator> {
 
     private static final int MIN_PHONE_LENGTH = 10;
 
@@ -59,7 +63,7 @@ public class LibraryMemberValidation implements Validator<LibraryMember> {
     }
  
     @Override
-    public ValidateOutput isValid(LibraryMember libraryMember) {
+    public ValidateOutput isValid(CustomerDecorator libraryMember) {
         if (libraryMember == null || libraryMember.getAddress() == null) {
             return new ValidateOutputImpl(false, "");
         }

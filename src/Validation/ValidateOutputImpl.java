@@ -5,6 +5,8 @@
  */
 package Validation;
 
+import interfaces.ValidateOutput;
+
 /**
  *
  * @author Sudeep

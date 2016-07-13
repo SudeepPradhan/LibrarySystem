@@ -3,7 +3,7 @@ package models.business.publications;
 import businessmodels.ProductImpl;
 import java.io.Serializable;
 import java.util.List;
-import models.base.Author;
+import businessmodels.Author;
 
 import decorators.ProductDecorator;
 

@@ -1,6 +1,8 @@
 package Validation;
 
-import models.base.Address;
+import interfaces.Validator;
+import interfaces.ValidateOutput;
+import businessmodels.Address;
 
 public class AddressValidation implements Validator<Address> {
 

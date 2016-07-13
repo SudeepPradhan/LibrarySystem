@@ -1,7 +1,9 @@
 package Validation;
 
-import models.base.Address;
-import models.base.Author;
+import interfaces.Validator;
+import interfaces.ValidateOutput;
+import businessmodels.Address;
+import businessmodels.Author;
 
 public class AuthorValidation implements Validator<Author> {
 

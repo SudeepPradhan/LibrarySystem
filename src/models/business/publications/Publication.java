@@ -1,6 +1,6 @@
 package models.business.publications;
 
-import Validation.Validatable;
+import interfaces.Validatable;
 import businessmodels.ProductImpl;
 import decorators.ProductDecorator;
 import java.io.Serializable;

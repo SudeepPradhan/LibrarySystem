@@ -1,11 +1,12 @@
 package businesscontrollers;
 
+import controllers.AuthorController;
 import database.DataManager;
 import database.DatabaseFacade;
 import java.util.ArrayList;
 import java.util.List;
-import models.base.Address;
-import models.base.Author;
+import businessmodels.Address;
+import businessmodels.Author;
 import Validation.AuthorValidation;
 
 public class AuthorControllerImpl implements AuthorController {

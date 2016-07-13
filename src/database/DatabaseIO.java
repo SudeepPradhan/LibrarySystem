@@ -1,10 +1,11 @@
 package database;
 
 import java.util.List;
-import models.base.Author;
-import models.business.LibraryMember;
+import businessmodels.Author;
 import interfaces.Product;
 import businessmodels.User;
+import decorators.CustomerDecorator;
+import interfaces.Customer;
 
 public class DatabaseIO {
 
@@ -32,12 +33,12 @@ public class DatabaseIO {
         return products;
     }
 
-    protected static boolean saveLibraryMembers(List<LibraryMember> libraryMembers) {
+    protected static boolean saveLibraryMembers(List<CustomerDecorator> libraryMembers) {
         return IOTool.writeObject(libraryMembers, LIBRARY_MEMBERS_PATH);
     }
 
-    protected static List<LibraryMember> loadLibraryMembers() {
-        List<LibraryMember> libraryMembers = (List<LibraryMember>) IOTool.readObject(LIBRARY_MEMBERS_PATH);
+    protected static List<CustomerDecorator> loadLibraryMembers() {
+        List<CustomerDecorator> libraryMembers = (List<CustomerDecorator>) IOTool.readObject(LIBRARY_MEMBERS_PATH);
         return libraryMembers;
     }
 

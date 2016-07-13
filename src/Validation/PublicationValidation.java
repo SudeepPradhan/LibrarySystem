@@ -1,8 +1,10 @@
 package Validation;
 
+import interfaces.Validator;
+import interfaces.ValidateOutput;
 import java.util.List;
-import models.base.Address;
-import models.base.Author;
+import businessmodels.Address;
+import businessmodels.Author;
 import models.business.publications.Book;
 
 import interfaces.Product;

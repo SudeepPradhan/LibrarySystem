@@ -4,7 +4,7 @@ import database.DataManager;
 import database.DatabaseFacade;
 import java.util.ArrayList;
 import java.util.List;
-import models.base.Author;
+import businessmodels.Author;
 import models.business.publications.Book;
 import Validation.PublicationValidation;
 

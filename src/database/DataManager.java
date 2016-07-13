@@ -1,12 +1,14 @@
 package database;
 
 import java.util.List;
-import models.base.Author;
+import businessmodels.Author;
 import models.business.LibraryMember;
 //import models.business.User;
 
 import interfaces.Product;
 import businessmodels.User;
+import decorators.CustomerDecorator;
+import interfaces.Customer;
 
 public interface DataManager {
 
@@ -15,7 +17,7 @@ public interface DataManager {
     //sudeep
     public boolean saveProduct(Product product);
 
-    public boolean saveLibraryMember(LibraryMember libraryMember);
+    public boolean saveLibraryMember(CustomerDecorator libraryMember);
 
     public boolean saveAuthor(Author author);
 
@@ -23,11 +25,11 @@ public interface DataManager {
 
     public List<User> getUsers();
 
-    public List<LibraryMember> getLibraryMembers();
+    public List<CustomerDecorator> getLibraryMembers();
 
     public List<Product> getProducts();
 
-    public LibraryMember getLibraryMember(String memberId);
+    public CustomerDecorator getLibraryMember(String memberId);
 
     public List<Author> getAuthors();
 

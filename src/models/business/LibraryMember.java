@@ -1,11 +1,11 @@
 package models.business;
 
-import Validation.Validatable;
-import Validation.ValidateOutput;
-import Validation.Validator;
+import interfaces.Validatable;
+import interfaces.ValidateOutput;
+import interfaces.Validator;
 import java.io.Serializable;
 import java.time.LocalDate;
-import models.base.Address;
+import businessmodels.Address;
 
 import businessmodels.CheckoutRecordEntry;
 import businessmodels.CustomerImpl;
@@ -13,19 +13,14 @@ import businessmodels.Inventory;
 import decorators.CustomerDecorator;
 import utilities.LogOutput;
 
-public class LibraryMember extends CustomerDecorator implements Validatable<LibraryMember>, Serializable {
-
-    private String firstName;
-    private String lastName;
-    private Address address;
-    private String phoneNumber;
+public class LibraryMember extends CustomerDecorator implements Validatable<CustomerDecorator>, Serializable {
 
     public LibraryMember(String memberId, String firstName, String lastName, Address address, String phoneNumber) {
         super(new CustomerImpl(memberId));
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setAddress(address);
+        this.setPhoneNumber(phoneNumber);;
         
         LogOutput.getLogger().info("Library Member constructor");
     }
@@ -45,49 +40,13 @@ public class LibraryMember extends CustomerDecorator implements Validatable<Libr
         LogOutput.getLogger().info("Library Member returnProduct method");
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getMemberId() {
-        return this.getCustomerId();
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
     @Override
     public String toString() {
         return this.getCustomerId();
     }
 
     @Override
-    public ValidateOutput validate(Validator<LibraryMember> validator) {
+    public ValidateOutput validate(Validator<CustomerDecorator> validator) {
         return validator.isValid(this);
     }
 }
